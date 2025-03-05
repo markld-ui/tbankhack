@@ -7,6 +7,17 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
+    <!-- Уведомления -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
     <div class="header">
         <div class="logo"><a href="{{ url_for('first_page') }}">SkillBridge</a></div>
         <div class="header-buttons">
@@ -104,6 +115,22 @@
             errorMessage.style.display = "none"; // Скрыть сообщение об ошибке, если email корректный
             return true;
         }
+    </script>
+
+    <script>
+        // Функция для автоматического скрытия уведомлений
+        function hideFlashMessages() {
+            const flashMessages = document.querySelectorAll('.flash');
+            flashMessages.forEach(message => {
+                setTimeout(() => {
+                    message.style.opacity = '0';
+                    setTimeout(() => message.remove(), 500); // Удаляем элемент после исчезновения
+                }, 3000); // Уведомление исчезнет через 3 секунды
+            });
+        }
+    
+        // Вызываем функцию при загрузке страницы
+        document.addEventListener('DOMContentLoaded', hideFlashMessages);
     </script>
 
 <div id="support-modal" class="support-modal">

@@ -8,6 +8,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="SHA512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
+    <!-- Уведомления -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
 
     <div class="header">
         <div class="logo"><a href="{{ url_for('first_page') }}">SkillBridge</a></div>
@@ -225,7 +235,21 @@
 
     <script src="functions.js"></script>
 
-
+    <script>
+        // Функция для автоматического скрытия уведомлений
+        function hideFlashMessages() {
+            const flashMessages = document.querySelectorAll('.flash');
+            flashMessages.forEach(message => {
+                setTimeout(() => {
+                    message.style.opacity = '0';
+                    setTimeout(() => message.remove(), 500); // Удаляем элемент после исчезновения
+                }, 3000); // Уведомление исчезнет через 3 секунды
+            });
+        }
+    
+        // Вызываем функцию при загрузке страницы
+        document.addEventListener('DOMContentLoaded', hideFlashMessages);
+        </script>
 
     </body>
 </html>

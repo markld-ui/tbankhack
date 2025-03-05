@@ -114,24 +114,35 @@ def submit_registration():
     email = request.form.get('email')
     app.logger.debug(f"Registration attempt for {user_type} with email: {email}")
 
+    # Проверка корректности email
+    if not email or "@" not in email:
+        flash("Некорректный email. Пожалуйста, введите действительный email.", "error")
+        return redirect(url_for('index_page'))
+
     # Проверка, существует ли уже email
     if user_type == 'employer':
         company = get_company_by_email(email)
         if company:
-            flash('Email уже зарегистрирован как работодатель.')
+            flash('Email уже зарегистрирован как работодатель.', "error")
             app.logger.warning(f"Email {email} already registered as employer.")
             return redirect(url_for('index_page'))
 
         comp_name = request.form.get('comp_name')
         password = request.form.get('password')
+        if not comp_name or not password:
+            flash("Все поля обязательны для заполнения.", "error")
+            return redirect(url_for('index_page'))
+
         hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())  # Хэшируем пароль
         company = Company(comp_name, email, hashed_password, "", "", 0, 0.0, None)
         company.add_comp()
         app.logger.info(f"Employer registered: {comp_name} with email: {email}")
+        flash("Регистрация прошла успешно!", "success")
+
     elif user_type == 'trainee':
         user = get_user_by_email(email)
         if user:
-            flash('Email уже зарегистрирован как стажёр.')
+            flash('Email уже зарегистрирован как стажёр.', "error")
             app.logger.warning(f"Email {email} already registered as trainee.")
             return redirect(url_for('index_page'))
 
@@ -139,10 +150,15 @@ def submit_registration():
         last_name = request.form.get('last_name')
         password = request.form.get('password')
         languages = request.form.get('languages', '')
+        if not first_name or not last_name or not password or not languages:
+            flash("Все поля обязательны для заполнения.", "error")
+            return redirect(url_for('index_page'))
+
         hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())  # Хэшируем пароль
         user = User(first_name, last_name, email, hashed_password, "", languages, "", None, None)
         user.add_user()
         app.logger.info(f"Trainee registered: {first_name} {last_name} with email: {email}")
+        flash("Регистрация прошла успешно!", "success")
 
     session['email'] = email
     return redirect(url_for('profile_employer_page' if user_type == 'employer' else 'profile_trainee_page'))
@@ -153,30 +169,26 @@ def login():
     email = request.form.get('login-email')
     password = request.form.get('login-password')
     app.logger.debug(f"Login attempt for email: {email}")
-    app.logger.info(password.encode('utf-8'))
+
+    if not email or not password:
+        flash("Пожалуйста, заполните все поля.", "error")
+        return redirect(url_for('first_page'))
+
     user = get_user_by_email(email)
     company = get_company_by_email(email)
-
-    if user:
-        app.logger.info(f"Searched user: {user}")
-        app.logger.info(type(user[4]).__name__)
-        app.logger.info(bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()))
-
-    if company:
-        app.logger.info(f"Searched user: {company}")
-        app.logger.info(type(company[3]).__name__)
-        app.logger.info(bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()))
 
     if user and bcrypt.checkpw(password.encode('utf-8'), user[4]):  # user[4] is already in bytes
         session['email'] = email
         app.logger.info(f"Trainee logged in: {email}")
-        return redirect(url_for('profile_trainee_page'))
+        flash("Вход выполнен успешно!", "success")
+        return redirect(url_for('profile_trainee_page'))  # Перенаправление на страницу профиля стажера
     elif company and bcrypt.checkpw(password.encode('utf-8'), company[3]):  # company[3] is already in bytes
         session['email'] = email
         app.logger.info(f"Employer logged in: {email}")
-        return redirect(url_for('profile_employer_page'))
+        flash("Вход выполнен успешно!", "success")
+        return redirect(url_for('profile_employer_page'))  # Перенаправление на страницу профиля работодателя
     else:
-        flash('Неверный email или пароль')
+        flash('Неверный email или пароль', "error")
         app.logger.warning(f"Failed login attempt for email: {email}")
         return redirect(url_for('first_page'))
 
