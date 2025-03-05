@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SkillBridge</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="SHA512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
 
@@ -12,34 +13,74 @@
         <div class="logo">SkillBridge</div>
         <div class="header-buttons">
             <button onclick="alert('Помощь скоро будет доступна')">Помощь</button>
-            <button onclick="alert('Функция входа скоро будет реализована')">Вход</button>
+            <button onclick="logout()">Выйти</button>
         </div>
     </div>
 
     <h1 class="page__title">Личный кабинет</h1>
 
-    <div>
-
+    <div class="container">
     
-    
-    <div>
-        <h2>Общая информация</h2>
+    <div class="information container__information1">
+        <h3>Общая информация</h3>
 
-        <div class="user-info">
-            <div class="section-title">Основная информация</div>
+        <div class="user-info"> 
+            <p><strong>Название компании:</strong> <span id="user-name">Иван Иванов</span> </p>
             <p><strong>Имя:</strong> <span id="user-name">Иван Иванов</span> </p>
-            <p><strong>Фамилия:</strong> <span id="user-name">Иван Иванов</span> </p>
             <p><strong>Email:</strong> <span id="user-email">ivan.ivanov@example.com</span> </p>
-            <p><strong>Языки программирования:</strong> <span id="lang">Php</span> </p> 
-            <a href="#" class="edit-link">Изменить</a>
         </div>
 
     </div>
+
+
+<div class="right-column">
+
+    <div class="container__information2">
+        <h3>Ваш рейтинг</h3>
+        <div class="star-rating">  <!-- Добавляем div с классом star-rating -->
+            <i class="fa fa-star" aria-hidden="true"></i>
+            <i class="fa fa-star" aria-hidden="true"></i>
+            <i class="fa fa-star" aria-hidden="true"></i>
+            <i class="fa fa-star" aria-hidden="true"></i>
+            <i class="fa fa-star" aria-hidden="true"></i>
+        </div>  <!-- Закрываем div с классом star-rating -->
+        <span class="rating-value"></span>
+    </div>
+    <button class="updateRatingButton" id="updateRatingButton">Обновить рейтинг</button>
+
+<div class="form container__information3 "> 
+
+    <label class="field form__field">
+        <span class="field__title">Напишите о своей компании и кого вы хотите видеть в ней:</span>
+        <textarea class="field__textarea" name="О себе"></textarea>
+      </label>
+
+</div>
+</div>
 </div>
 
-<div>
-    <div>
-        <h2> Ваш рейтинг</h2>
-    </div>
-</div>
-</body>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const ratingValue = 5.0; // Замените это значение на свой фактический рейтинг
+
+      const starRating = document.querySelector(".star-rating");
+      const ratingValueSpan = document.querySelector(".rating-value");
+
+      if (starRating && ratingValueSpan) {
+        const stars = starRating.querySelectorAll("i");
+        const fullStars = Math.floor(ratingValue); // Целая часть рейтинга
+        const hasHalfStar = ratingValue % 1 !== 0; // Есть ли дробная часть
+
+        // Заполняем целые звезды
+        for (let i = 0; i < fullStars; i++) {
+          stars[i].classList.add("active");
+        }
+
+        // Обновляем текстовое значение рейтинга
+        ratingValueSpan.textContent = ratingValue.toFixed(1) + " / 5"; // Отображаем с одним знаком после запятой
+      }
+    });
+  </script>
+
+    </body>
+</html>

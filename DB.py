@@ -1,4 +1,5 @@
 import sqlite3
+import bcrypt
 
 # Функция для создания базы данных и таблицы
 def create_database():
@@ -21,7 +22,7 @@ def create_database():
             first_name TEXT NOT NULL,
             last_name TEXT NOT NULL,
             email TEXT NOT NULL UNIQUE,
-            password TEXT NOT NULL,
+            password BLOB NOT NULL,
             project TEXT NOT NULL,
             id_request INTEGER,
             id_rating INTEGER,
@@ -90,7 +91,13 @@ class User:
         self.id_rating = id_rating
         self.id_request = id_request
 
-    # Функция для добавления пользователя в базу данных
+    def hash_password(self, password):
+        print(f"Password encode: {password.encode('utf-8')}")
+        return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())  # Return bytes
+
+    def check_password(self, password):
+        return bcrypt.checkpw(password.encode('utf-8'), self.password)
+
     def add_user(self):
         conn = sqlite3.connect('people_db.db')
         cursor = conn.cursor()
@@ -119,6 +126,12 @@ class Company:
         self.min_rating = min_rating
         self.rating = rating
         self.id_request = id_request
+
+    def hash_password(self, password):
+        return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())  # Return bytes
+
+    def check_password(self, password):
+        return bcrypt.checkpw(password.encode('utf-8'), self.password)
 
     def add_comp(self):
         conn = sqlite3.connect('people_db.db')

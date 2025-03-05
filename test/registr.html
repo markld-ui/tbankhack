@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация | SkillBridge</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="header">
+        <div class="logo">SkillBridge</div>
+        <div class="header-buttons">
+            <button onclick="alert('Помощь скоро будет доступна')">Помощь</button>
+            <button id="login-btn">Вход</button>
+        </div>
+    </div>
+
+    <div class="wrap_container">
+        <h2 class="title">Регистрация в SkillBridge</h2>
+        <div class="register-box">
+            <button id="employer-btn" class="btn-employer">Я работодатель</button>
+            <button id="trainee-btn" class="btn-trainee">Я стажёр</button>
+        </div>
+    </div>
+
+    <div id="employer-panel" class="register-panel">
+        <div class="panel-content">
+            <span class="close-btn" onclick="closePanel('employer')">&times;</span>
+            <h2>Регистрация работодателя</h2>
+            <form id="employer-form">
+                <input type="text" placeholder="Название компании" required>
+                <input type="text" placeholder="Имя" required>
+                <input type="email" placeholder="Email" required>
+                <input type="password" placeholder="Пароль" required>
+                <button type="submit">Зарегистрироваться</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="trainee-panel" class="register-panel">
+        <div class="panel-content">
+            <span class="close-btn" onclick="closePanel('trainee')">&times;</span>
+            <h2>Регистрация стажёра</h2>
+            <form id="trainee-form">
+                <input type="text" placeholder="Имя" required>
+                <input type="text" placeholder="Фамилия" required>
+                <input type="email" placeholder="Email" required>
+                <input type="password" placeholder="Пароль" required>
+                <button type="submit">Зарегистрироваться</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function openPanel(type) {
+            // Закрываем любую открытую панель перед открытием новой
+            const openPanels = document.querySelectorAll('.show');
+            openPanels.forEach(panel => {
+                panel.classList.remove('show');
+                setTimeout(() => panel.style.display = 'none', 300);
+            });
+    
+            const panel = document.getElementById(`${type}-panel`);
+            panel.style.display = 'flex';
+            setTimeout(() => panel.classList.add('show'), 10);
+        }
+        
+        function closePanel(type) {
+            const panel = document.getElementById(`${type}-panel`);
+            panel.classList.remove('show');
+            setTimeout(() => panel.style.display = 'none', 300);
+        }
+
+        // Функции для обработки отправки форм и перенаправления на личный кабинет
+        function handleEmployerSubmit(event) {
+            event.preventDefault(); // Предотвращаем стандартную отправку формы
+            // Здесь можно добавить код для обработки данных формы работодателя
+            window.location.href = "profile_employer.html"; // Переход на личный кабинет работодателя
+        }
+
+        function handleTraineeSubmit(event) {
+            event.preventDefault(); // Предотвращаем стандартную отправку формы
+            // Здесь можно добавить код для обработки данных формы стажёра
+            window.location.href = "profile_trainee.html"; // Переход на личный кабинет стажёра
+        }
+
+        document.getElementById("employer-btn").onclick = () => openPanel('employer');
+        document.getElementById("trainee-btn").onclick = () => openPanel('trainee');
+
+        // Добавляем обработчики для отправки форм
+        document.getElementById("employer-form").addEventListener("submit", handleEmployerSubmit);
+        document.getElementById("trainee-form").addEventListener("submit", handleTraineeSubmit);
+    </script>
+
+</body>
+</html>
+

@@ -15,6 +15,7 @@
             <button id="login-btn">Вход</button>
         </div>
     </div>
+    
     <main class="information">
         <div class="information_block">
             <p><strong>SkillBridge</strong> — это удобный онлайн-сервис, который помогает соискателям и работодателям найти друг друга.</p>
@@ -24,6 +25,7 @@
             </ul>
         </div>
     </main>
+    
     <section class="how-it-works">
         <h2>Как это работает?</h2>
         <div class="roles">
@@ -60,7 +62,7 @@
                 <input type="password" id="login-password" name="login-password" placeholder="Пароль" required>
                 <button type="submit">Войти</button>
             </form>
-            <p class="register-text">Нет аккаунта? <a href="{{ url_for('index_page') }}">Зарегистрироваться</a></p>
+            <p class="register-text">Нет аккаунта? <a href="{{ url_for('index_page') }}" id="register-link">Зарегистрироваться</a></p>
         </div>
     </div>
 
@@ -72,13 +74,13 @@
             const closeBtn = document.getElementById("close-login");
 
             function openLoginPanel() {
-                loginModal.style.display = "flex";
-                setTimeout(() => loginModal.classList.add("show"), 10);
+                loginModal.style.display = "flex"; // Показываем окно
+                setTimeout(() => loginModal.classList.add("show"), 10); // Добавляем анимацию
             }
 
             function closeLoginPanel() {
                 loginModal.classList.remove("show");
-                setTimeout(() => loginModal.style.display = "none", 300);
+                setTimeout(() => loginModal.style.display = "none", 300); // Скрываем окно после анимации
             }
 
             if (loginBtn) loginBtn.addEventListener("click", openLoginPanel);
@@ -103,6 +105,8 @@
             });
         });
     </script>
-    <script src="functions.js"></script>
+
+<script src="functions.js"></script>
+
 </body>
 </html>

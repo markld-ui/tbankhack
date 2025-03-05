@@ -1,9 +1,11 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 import logging
 from DB import User, Company, create_database, get_user_by_email, get_company_by_email
+import os
+import bcrypt
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'  # Секретный ключ для управления сессиями
+app.secret_key = f'{os.urandom(12).hex()}'  # Секретный ключ для управления сессиями
 
 # Инициализация базы данных
 create_database()
@@ -53,7 +55,8 @@ def submit_registration():
 
         comp_name = request.form.get('comp_name')
         password = request.form.get('password')
-        company = Company(comp_name, email, password, 0, 0.0, None)
+        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())  # Хэшируем пароль
+        company = Company(comp_name, email, hashed_password, 0, 0.0, None)
         company.add_comp()
         app.logger.info(f"Employer registered: {comp_name} with email: {email}")
     elif user_type == 'trainee':
@@ -66,7 +69,8 @@ def submit_registration():
         first_name = request.form.get('first_name')
         last_name = request.form.get('last_name')
         password = request.form.get('password')
-        user = User(first_name, last_name, email, password, "", None, None)
+        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())  # Хэшируем пароль
+        user = User(first_name, last_name, email, hashed_password, "", None, None)
         user.add_user()
         app.logger.info(f"Trainee registered: {first_name} {last_name} with email: {email}")
 
@@ -78,15 +82,18 @@ def login():
     email = request.form.get('login-email')
     password = request.form.get('login-password')
     app.logger.debug(f"Login attempt for email: {email}")
-
+    app.logger.info(password.encode('utf-8'))
     user = get_user_by_email(email)
+    app.logger.info(f"Searched user: {user}")
+    app.logger.info(type(user[4]).__name__)
+    app.logger.info(bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()))
     company = get_company_by_email(email)
 
-    if user and user[4] == password:
+    if user and bcrypt.checkpw(password.encode('utf-8'), user[4]):  # user[4] is already in bytes
         session['email'] = email
         app.logger.info(f"Trainee logged in: {email}")
         return redirect(url_for('profile_trainee_page'))
-    elif company and company[3] == password:
+    elif company and bcrypt.checkpw(password.encode('utf-8'), company[3]):  # company[3] is already in bytes
         session['email'] = email
         app.logger.info(f"Employer logged in: {email}")
         return redirect(url_for('profile_employer_page'))
@@ -95,11 +102,13 @@ def login():
         app.logger.warning(f"Failed login attempt for email: {email}")
         return redirect(url_for('first_page'))
 
+
 @app.route("/logout")
 def logout():
     app.logger.debug(f"User  logged out: {session.get('email')}")
     session.pop('email', None)
     return redirect(url_for('first_page'))
+
 
 if __name__ == "__main__":
     app.run(debug=True)
