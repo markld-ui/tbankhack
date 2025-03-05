@@ -83,6 +83,7 @@ def update_description():
 
     email = session['email']
     description = request.form.get('description')  # Получаем новое описание из формы
+    app.logger.debug(f"Received description: {description}")
 
     conn = sqlite3.connect('people_db.db')
     cursor = conn.cursor()

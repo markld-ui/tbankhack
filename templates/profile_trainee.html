@@ -101,7 +101,7 @@
         <span class="field__title">Напишите о своих сильных сторонах и интересных проектах:</span>
         <textarea class="field__textarea" id="description" name="description">{{ user[7] if user[7] else '' }}</textarea>
       </label>
-      <button class="updateDescriptionButton" id="updateDescriptionButton">Обновить описание</button>
+      <button class="updateDescriptionButton" id="updateDescriptionButton" disabled>Обновить описание</button>
 
 </div>
     
@@ -174,7 +174,7 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-      const ratingValue = 5.0; // Замените это значение на свой фактический рейтинг
+      const ratingValue = 1.0; // Замените это значение на свой фактический рейтинг
 
       const starRating = document.querySelector(".star-rating");
       const ratingValueSpan = document.querySelector(".rating-value");
@@ -184,7 +184,7 @@
 
       updateButton.addEventListener("click", function () {
         const description = descriptionTextarea.value;
-
+    
         fetch("{{ url_for('update_description') }}", {
             method: "POST",
             headers: {
@@ -200,7 +200,7 @@
         .catch(error => {
             console.error("Ошибка при обновлении описания:", error);
         });
-      });
+    });
 
       if (starRating && ratingValueSpan) {
         const stars = starRating.querySelectorAll("i");

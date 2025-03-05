@@ -989,3 +989,135 @@ button:hover {
 button:active {
     transform: scale(0.95);
 }
+
+/* Медиа-запросы для адаптивности */
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .header-buttons {
+        margin-top: 10px;
+    }
+
+    .header-buttons button {
+        margin: 5px 0;
+    }
+
+    .container {
+        flex-direction: column;
+        padding: 10px;
+    }
+
+    .container__information1, .right-column {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .right-column {
+        padding-left: 0;
+    }
+
+    .roles {
+        flex-direction: column;
+    }
+
+    .role {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .internship-container, .skills-container {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .internship-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .buttons {
+        margin-top: 10px;
+        justify-content: flex-start;
+    }
+
+    .search-container {
+        padding: 10px;
+    }
+
+    .results-list li {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .result-rating {
+        margin-top: 5px;
+    }
+
+    .result-details {
+        margin-top: 5px;
+    }
+
+    .list__container {
+        padding: 10px;
+    }
+
+    .results-table th, .results-table td {
+        padding: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .header-buttons button {
+        width: 100%;
+    }
+
+    .register-box {
+        width: 100%;
+        padding: 20px;
+    }
+
+    .register-panel {
+        width: 100%;
+    }
+
+    .modal-content {
+        width: 90%;
+    }
+
+    .support-modal-content {
+        width: 90%;
+    }
+
+    .search-container {
+        padding: 10px;
+    }
+
+    .results-list li {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .result-rating {
+        margin-top: 5px;
+    }
+
+    .result-details {
+        margin-top: 5px;
+    }
+
+    .list__container {
+        padding: 10px;
+    }
+
+    .results-table th, .results-table td {
+        padding: 6px;
+    }
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
