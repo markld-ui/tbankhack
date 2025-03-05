@@ -947,3 +947,45 @@ form button:hover {
     text-decoration: none; /* Убираем подчеркивание */
     color: inherit; /* Наследуем цвет текста от родителя */
 }
+
+.results-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.results-table th, .results-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.results-table th {
+    background-color: #f8f8f8;
+    font-weight: bold;
+    color: #333;
+}
+
+.results-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+.results-table td {
+    color: #555;
+}
+
+button {
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+button:active {
+    transform: scale(0.95);
+}

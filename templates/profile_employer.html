@@ -26,8 +26,10 @@
 
         <div class="user-info"> 
             <p><strong>Название компании:</strong> <span id="user-name">{{ company[1] }}</span> </p>
-            <p><strong>Имя:</strong> <span id="user-name">{{ company[2] }}</span> </p>
+            <p><strong>Имя:</strong> <span id="user-name">{{ company[1] }}</span> </p>
             <p><strong>Email:</strong> <span id="user-email">{{ company[2] }}</span> </p>
+            <p><strong>Языки программирования:</strong> <span id="company">{{ company[4] }}</span> </p>
+            <p><strong>Описание:</strong> <span id="description">{{ company[5] }}</span> </p>
             <p><strong>Локация:</strong> <span id="user-email">Томск</span> </p>
         </div>
 
@@ -195,6 +197,11 @@
         ratingValueSpan.textContent = ratingValue.toFixed(1) + " / 5"; // Отображаем с одним знаком после запятой
       }
     });
+
+    function logout() {
+        // Перенаправляем на главную страницу
+        window.location.href = "/";
+    }
   </script>
 
 

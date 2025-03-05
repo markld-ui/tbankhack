@@ -68,6 +68,13 @@ def profile_trainee_page():
     return render_template("profile_trainee.html", user=user)
 
 
+@app.route("/calculate_compatibility/<int:user_id>")
+def calculate_compatibility(user_id):
+    from DB import calculate_compatibility as calc_comp
+    results = calc_comp(user_id)
+    return render_template("compatibility_results.html", results=results)
+
+
 @app.route("/update_description", methods=['POST'])
 def update_description():
     if 'email' not in session:
@@ -117,7 +124,7 @@ def submit_registration():
         comp_name = request.form.get('comp_name')
         password = request.form.get('password')
         hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())  # Хэшируем пароль
-        company = Company(comp_name, email, hashed_password, "", 0, 0.0, None)
+        company = Company(comp_name, email, hashed_password, "", "", 0, 0.0, None)
         company.add_comp()
         app.logger.info(f"Employer registered: {comp_name} with email: {email}")
     elif user_type == 'trainee':

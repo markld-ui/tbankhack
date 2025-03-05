@@ -1,0 +1,39 @@
+<!-- templates/compatibility_results.html -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Результаты совместимости</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="header">
+        <div class="logo"><a href="{{ url_for('first_page') }}">SkillBridge</a></div>
+        <div class="header-buttons">
+            <button onclick="window.history.back()">Назад</button>
+        </div>
+    </div>
+
+    <h1 class="page__title">Результаты совместимости</h1>
+
+    <div class="container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Название компании</th>
+                    <th>Совместимость (%)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for result in results %}
+                <tr>
+                    <td>{{ result.name_company }}</td>
+                    <td>{{ result.compatibility | round(2) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

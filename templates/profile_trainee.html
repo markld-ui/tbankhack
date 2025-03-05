@@ -91,7 +91,9 @@
         </div>  <!-- Закрываем div с классом star-rating -->
         <span class="rating-value"></span>
     </div>
-    <button class="updateRatingButton" id="updateRatingButton">Обновить рейтинг</button>
+    <button class="updateRatingButton" onclick="window.location.href='{{ url_for('calculate_compatibility', user_id=user[0]) }}'">
+        Рассчитать совместимость
+    </button>
 
 <div class="form container__information3 "> 
 
