@@ -4,9 +4,12 @@ from DB import User, Company, create_database, get_user_by_email, get_company_by
 import os
 import bcrypt
 import sqlite3
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = f'{os.urandom(12).hex()}'  # Секретный ключ для управления сессиями
+app.secret_key = os.getenv('SECRET_KEY') # Секретный ключ для управления сессиями
 
 
 # Инициализация базы данных
