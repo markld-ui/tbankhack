@@ -32,6 +32,21 @@
 - **База данных**: [SQLite3]
 - **Дополнительные инструменты**: [Docker, Git]
 
+## Пощупать проект
+
+*Ссылка на сайт:* https://tbankhack.onrender.com/
+
+*Стажер:*
+- *login:* user@gmail.com
+- *password:* Qwerty355
+
+*Компания:*
+- *login:* company@gmail.com
+- *password:* Qwerty355
+
+| *PS.: Вы также можете создать свою учетную запись*
+
+
 ## Лицензия
 
 Этот проект лицензирован под лицензией MIT. См. файл [LICENSE](LICENSE) для подробностей.
