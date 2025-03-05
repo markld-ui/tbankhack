@@ -1,5 +1,4 @@
 * {
-    margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: Arial, sans-serif;
@@ -355,11 +354,12 @@ input[type="checkbox"] {
 
 .container__information2 {
     background-color: #ffffff;   /* Светло-голубой фон для рейтинга */
-    border: 1px solid #add8e6;   /* Голубая рамка */
+    border: 1px solid #eeee;   /* Голубая рамка */
     padding: 20px;              /* Отступы */
     border-radius: 5px;          /* Скругленные углы */
     margin-bottom: 20px;       /* Отступ снизу */
-    text-align: center;          /* Выравниваем текст по центру */
+    text-align: center;   
+    box-shadow: 0 2px 5 px rgba(0, 0, 0, 0.05);       /* Выравниваем текст по центру */
 }
 
 .container__information2 h3 {
@@ -401,7 +401,7 @@ input[type="checkbox"] {
 }
   
   .field__textarea {
-    width: 700px;             /* Текстовое поле занимает всю ширину */
+    width: 100%;             /* Текстовое поле занимает всю ширину */
     height: 300px;            /* Фиксированная высота (можно настроить) */
     padding: 12px;            /* Увеличенные отступы внутри текстового поля */
     border: 1px solid #ccc;    /* Рамка */
@@ -471,6 +471,196 @@ input[type="checkbox"] {
   margin-bottom: 20px;
 }
 
+
+.invite__button{
+
+    background-color: #f0f0f0; /* Светло-серый фон */
+    border: 1px solid #ccc;       /* Серая рамка */
+    border-radius: 5px;            /* Скругленные углы */
+    padding: 8px 12px;           /* Уменьшенные отступы (сверху/снизу и слева/справа) */
+    font-size: 0.9em;             /* Уменьшенный размер шрифта */
+    color: #0b0606;                 /* Темно-серый текст */
+    cursor: pointer;              /* Курсор "рука" при наведении */
+    transition: background-color 0.2s ease; /* Плавный переход цвета фона */
+    white-space: nowrap;          /* Запрещаем перенос текста */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 300px;
+    margin-bottom: 20px;
+
+
+
+}
+
+.invite__container{
+width: 100%;
+display: flex;
+justify-content: center;
+align-items: center;
+}
+
+
+.internship-container {
+
+max-width: 1400px;
+margin: 20px auto;
+background: white;
+padding: 20px;
+border-radius: 10px;
+box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.internship-section {
+margin-bottom: 20px;
+}
+
+h2, h3 {
+text-align: center;
+}
+
+.internship-list {
+list-style: none;
+padding: 0;
+}
+
+.internship-item {
+display: flex;
+justify-content: space-between;
+align-items: center;
+background: #f9f9f9;
+padding: 10px;
+border-radius: 5px;
+margin-bottom: 10px;
+}
+
+.company-name {
+font-weight: bold;
+flex: 2;
+}
+
+.internship-date {
+flex: 1;
+text-align: center;
+font-size: 14px;
+color: #666;
+}
+
+.buttons {
+flex: 1;
+display: flex;
+justify-content: flex-end;
+}
+
+.accept, .decline {
+padding: 5px 10px;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+margin-left: 5px;
+}
+
+.accept {
+background: white;
+color: black;
+}
+
+.decline {
+background: #e74c3c;
+color: white;
+}
+
+.status {
+flex: 1;
+text-align: right;
+font-weight: bold;
+color: #f39c12;
+}
+
+.internship-container, .skills-container {
+width: 80%;
+max-width: 700px;
+margin: 20px auto;
+background: white;
+padding: 20px;
+border-radius: 10px;
+box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.internship-list {
+list-style: none;
+padding: 0;
+}
+
+.internship-item {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 10px;
+border-bottom: 1px solid #ddd;
+}
+
+.buttons button {
+margin-left: 5px;
+padding: 5px 10px;
+border: none;
+cursor: pointer;
+border-radius: 5px;
+}
+
+.additionaly{
+    background: gray;
+    color: white;
+}
+
+.accept {
+background: rgb(2, 143, 24);
+color: white;
+}
+
+.decline {
+background: #e74c3c;
+color: white;
+}
+
+.skills-list, .selected-skills {
+display: flex;
+flex-wrap: wrap;
+gap: 10px;
+margin-bottom: 10px;
+}
+
+.skill {
+padding: 8px 12px;
+background: #3498db;
+color: white;
+border-radius: 20px;
+cursor: pointer;
+display: inline-block;
+}
+
+.skill:hover {
+background: #2980b9;
+}
+
+.selected-skills {
+min-height: 40px;
+border: 1px solid #ccc;
+padding: 10px;
+border-radius: 5px;
+background: #f9f9f9;
+}
+
+textarea {
+width: 100%;
+height: 50px;
+margin-top: 10px;
+resize: none;
+padding: 10px;
+font-size: 14px;
+border: 1px solid #ccc;
+border-radius: 5px;
+}
 
 .modal {
     display: none;
@@ -543,4 +733,191 @@ form button:hover {
 
 .register-text a:hover {
     text-decoration: underline;
+}
+
+/* Окно поддержки */
+.support-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    justify-content: center;
+    align-items: center;
+}
+
+.support-modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.support-modal textarea {
+    width: 100%;
+    height: 100px;
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    resize: none;
+}
+
+.support-modal button {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.support-modal button:hover {
+    background: #2980b9;
+}
+
+.close-support-btn {
+    font-size: 24px;
+    cursor: pointer;
+    float: right;
+}
+
+.support-modal {
+    display: none; /* Скрываем по умолчанию */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Затемнение фона */
+    justify-content: center;
+    align-items: center;
+}
+
+.support-modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    width: 300px;
+}
+
+.close-support-btn {
+    float: right;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.search-container {
+    width: 100%;
+    margin: 20px auto;
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 8px;
+    font-family: sans-serif;
+}
+
+/* Стили для поля поиска */
+.search-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+/* Стили для переключателя */
+.toggle-container {
+    margin-bottom: 15px;
+    width: 90%;
+}
+
+.toggle-container label {
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+/* Стили для списка результатов */
+.results-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.results-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.results-list li:last-child {
+    border-bottom: none;
+}
+
+/* Стили для имени */
+.result-name {
+    flex-grow: 1;
+}
+
+/* Стили для рейтинга */
+.result-rating {
+    font-weight: bold;
+    color: #4CAF50;
+    min-width: 60px; /* Увеличиваем ширину для визуального баланса */
+    text-align: center; /* Центрируем рейтинг */
+}
+
+/* Стили для кнопки "Подробнее" */
+.result-details {
+    color: #007bff;
+    text-decoration: none;
+    padding: 5px 10px; /* добавляем отступы */
+    border: 1px solid #007bff; /* добавляем рамку */
+    border-radius: 5px; /* скругляем углы */
+    font-size: 0.9em; /* немного уменьшаем размер текста */
+    transition: background-color 0.3s ease; /* добавляем плавную анимацию для фона */
+}
+
+.result-details:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+.list__container{
+    display: flex;              /* Включаем Flexbox для основного контейнера */
+    max-width: 800px;         /* Максимальная ширина контейнера */
+    margin: 20px auto;         /* Центрируем контейнер */
+    padding: 20px;              /* Отступы внутри контейнера */
+    background-color: #fff;      /* Белый фон для контейнера */
+    border-radius: 5px;          /* Скругленные углы */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Тень */
+}
+
+.result-rating {
+    font-weight: bold;
+    min-width: 60px;
+    text-align: center;
+}
+
+/* Добавляем разные классы для разных диапазонов процентов */
+.result-rating.high {
+    color: #4CAF50; /* Зеленый */
+}
+
+.result-rating.medium {
+    color: #ff9800; /* Оранжевый */
+}
+
+.result-rating.low {
+    color: #f44336; /* Красный */
 }

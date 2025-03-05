@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SkillBridge</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
@@ -51,20 +51,123 @@
         </div>
         <p class="cta"> <strong>SkillBridge</strong> – это удобный способ <strong>найти работу или подобрать специалистов</strong> для вашей команды! </p>
     </section>
+
+<div class="list__container">
+    <div class="search-container">
+        <input type="text" id="searchInput" class="search-input" placeholder="Поиск...">
     
+        <div class="toggle-container">
+            <label>
+                <input type="radio" name="searchType" value="companies" checked> Компании</label>
+                <label>
+                    <input type="radio" name="searchType" value="trainees"> Стажеры
+                </label>
+            </div>
+        
+            <ul id="resultsList" class="results-list">
+                <!-- Здесь будут результаты -->
+            </ul>
+        </div>
+    </div>
+
     <!-- Выдвижное модальное окно -->
     <div id="loginModal" class="modal">
         <div class="modal-content">
             <span id="close-login" class="close-btn">&times;</span>
             <h2>Вход в SkillBridge</h2>
-            <form id="login-form" action="{{ url_for('login') }}" method="POST">
-                <input type="email" id="login-email" name="login-email" placeholder="Логин" required>
-                <input type="password" id="login-password" name="login-password" placeholder="Пароль" required>
+            <form id="login-form">
+                <input type="email" id="login-email" placeholder="Логин" required>
+                <input type="password" id="login-password" placeholder="Пароль" required>
                 <button type="submit">Войти</button>
             </form>
-            <p class="register-text">Нет аккаунта? <a href="{{ url_for('index_page') }}" id="register-link">Зарегистрироваться</a></p>
+            <p class="register-text">Нет аккаунта? <a href="#" id="register-link">Зарегистрироваться</a></p>
         </div>
     </div>
+
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        const searchTypeRadios = document.getElementsByName('searchType');
+        const resultsList = document.getElementById('resultsList');
+    
+        // Данные для поиска (замените на ваши реальные данные)
+        const companies = [
+            { name: 'SoftDev', compatibility: 85, detailsUrl: '' },
+            { name: 'FutureTech', compatibility: 85, detailsUrl: '' },
+            { name: 'TechCorp', compatibility: 30, detailsUrl: '' },
+            { name: 'InnovateX', compatibility: 55, detailsUrl: '#' }
+        ];
+    
+        const trainees = [
+            { name: 'Иван Иванов', compatibility: 45, detailsUrl: '#' },
+            { name: 'Петр Петров', compatibility: 25, detailsUrl: '#' },
+            { name: 'Анна Сидорова', compatibility: 85, detailsUrl: '#' },
+            { name: 'Елена Смирнова', compatibility: 90, detailsUrl: '#' }
+        ];
+    
+        // Функция для отображения результатов
+        function displayResults(results) {
+    resultsList.innerHTML = '';
+
+    if (results.length === 0) {
+        resultsList.innerHTML = '<li>Ничего не найдено</li>';
+        return;
+    }
+
+    results.forEach(item => {
+        const listItem = document.createElement('li');
+        let ratingClass = 'result-rating'; // Базовый класс
+
+        if (item.compatibility >= 80) {
+            ratingClass += ' high';
+        } else if (item.compatibility >= 50) {
+            ratingClass += ' medium';
+        } else {
+            ratingClass += ' low';
+        }
+
+        listItem.innerHTML = `
+            <span class="${ratingClass}">${item.compatibility}%</span>
+            <span class="result-name">${item.name}</span>
+            <a href="${item.detailsUrl}" class="result-details">Подробнее</a>
+        `;
+        resultsList.appendChild(listItem);
+    });
+    
+}
+    
+        // Функция для фильтрации результатов
+        function filterResults(searchTerm, searchType) {
+            const data = searchType === 'companies' ? companies : trainees;
+            const filtered = data.filter(item =>
+                item.name.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+            return filtered;
+        }
+    
+        // Функция для обработки ввода в поле поиска и смены переключателя
+        function handleSearch() {
+            const searchTerm = searchInput.value;
+            let searchType = '';
+            for (const radio of searchTypeRadios) {
+                if (radio.checked) {
+                    searchType = radio.value;
+                    break;
+                }
+            }
+    
+            const results = filterResults(searchTerm, searchType);
+            displayResults(results);
+        }
+    
+        // Привязываем обработчик к полю поиска и переключателям
+        searchInput.addEventListener('input', handleSearch);
+        for (const radio of searchTypeRadios) {
+            radio.addEventListener('change', handleSearch);
+        }
+    
+        // Отображаем результаты по умолчанию (компании)
+        handleSearch();
+    </script>
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -96,6 +199,10 @@
                 const email = document.getElementById("login-email").value;
                 const password = document.getElementById("login-password").value;
 
+                // Если данные верны (для упрощения — только проверка на заполненность)
+                if (email && password)  {
+                    alert("Пожалуйста, введите правильные данные!");
+                }
             });
 
             const registerLink = document.getElementById("register-link");
@@ -103,10 +210,21 @@
                 event.preventDefault(); // Останавливаем переход по ссылке
                 window.location.href = "registr.html"; // Переход на страницу регистрации
             });
-        });
+
+        
+            });
     </script>
 
 <script src="functions.js"></script>
+
+<div id="support-modal" class="support-modal">
+    <div class="support-modal-content">
+        <span class="close-support-btn">&times;</span>
+        <h2>Опишите вашу проблему</h2>
+        <textarea id="support-textarea" placeholder="Введите ваш вопрос..."></textarea>
+        <button id="send-support-btn">Отправить</button>
+    </div>
+</div>
 
 </body>
 </html>

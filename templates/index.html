@@ -9,12 +9,13 @@
 <body>
 
     <div class="header">
-        <div class="logo">SkillBridge</div>
+        <div class="logo"><a href="{{ url_for('first_page') }}">SkillBridge</a></div>
         <div class="header-buttons">
             <button onclick="alert('Помощь скоро будет доступна')">Помощь</button>
             <button id="login-btn">Вход</button>
         </div>
     </div>
+
     <main class="information">
         <div class="information_block">
             <p><strong>SkillBridge</strong> — это удобный онлайн-сервис, который помогает соискателям и работодателям найти друг друга.</p>
@@ -24,6 +25,7 @@
             </ul>
         </div>
     </main>
+
     <section class="how-it-works">
         <h2>Как это работает?</h2>
         <div class="roles">
@@ -49,7 +51,25 @@
         </div>
         <p class="cta"> <strong>SkillBridge</strong> – это удобный способ <strong>найти работу или подобрать специалистов</strong> для вашей команды! </p>
     </section>
-    
+
+    <div class="list__container">
+        <div class="search-container">
+            <input type="text" id="searchInput" class="search-input" placeholder="Поиск...">
+
+            <div class="toggle-container">
+                <label>
+                    <input type="radio" name="searchType" value="companies" checked> Компании</label>
+                    <label>
+                        <input type="radio" name="searchType" value="trainees"> Стажеры
+                    </label>
+                </div>
+
+                <ul id="resultsList" class="results-list">
+                    <!-- Здесь будут результаты -->
+                </ul>
+            </div>
+        </div>
+
     <!-- Выдвижное модальное окно -->
     <div id="loginModal" class="modal">
         <div class="modal-content">
@@ -63,6 +83,91 @@
             <p class="register-text">Нет аккаунта? <a href="{{ url_for('index_page') }}">Зарегистрироваться</a></p>
         </div>
     </div>
+
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        const searchTypeRadios = document.getElementsByName('searchType');
+        const resultsList = document.getElementById('resultsList');
+
+        // Данные для поиска (замените на ваши реальные данные)
+        const companies = [
+            { name: 'SoftDev', compatibility: 85, detailsUrl: '' },
+            { name: 'FutureTech', compatibility: 85, detailsUrl: '' },
+            { name: 'TechCorp', compatibility: 30, detailsUrl: '' },
+            { name: 'InnovateX', compatibility: 55, detailsUrl: '#' }
+        ];
+
+        const trainees = [
+            { name: 'Иван Иванов', compatibility: 45, detailsUrl: '#' },
+            { name: 'Петр Петров', compatibility: 25, detailsUrl: '#' },
+            { name: 'Анна Сидорова', compatibility: 85, detailsUrl: '#' },
+            { name: 'Елена Смирнова', compatibility: 90, detailsUrl: '#' }
+        ];
+
+        // Функция для отображения результатов
+        function displayResults(results) {
+    resultsList.innerHTML = '';
+
+    if (results.length === 0) {
+        resultsList.innerHTML = '<li>Ничего не найдено</li>';
+        return;
+    }
+
+    results.forEach(item => {
+        const listItem = document.createElement('li');
+        let ratingClass = 'result-rating'; // Базовый класс
+
+        if (item.compatibility >= 80) {
+            ratingClass += ' high';
+        } else if (item.compatibility >= 50) {
+            ratingClass += ' medium';
+        } else {
+            ratingClass += ' low';
+        }
+
+        listItem.innerHTML = `
+            <span class="${ratingClass}">${item.compatibility}%</span>
+            <span class="result-name">${item.name}</span>
+            <a href="${item.detailsUrl}" class="result-details">Подробнее</a>
+        `;
+        resultsList.appendChild(listItem);
+    });
+
+}
+
+        // Функция для фильтрации результатов
+        function filterResults(searchTerm, searchType) {
+            const data = searchType === 'companies' ? companies : trainees;
+            const filtered = data.filter(item =>
+                item.name.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+            return filtered;
+        }
+
+        // Функция для обработки ввода в поле поиска и смены переключателя
+        function handleSearch() {
+            const searchTerm = searchInput.value;
+            let searchType = '';
+            for (const radio of searchTypeRadios) {
+                if (radio.checked) {
+                    searchType = radio.value;
+                    break;
+                }
+            }
+
+            const results = filterResults(searchTerm, searchType);
+            displayResults(results);
+        }
+
+        // Привязываем обработчик к полю поиска и переключателям
+        searchInput.addEventListener('input', handleSearch);
+        for (const radio of searchTypeRadios) {
+            radio.addEventListener('change', handleSearch);
+        }
+
+        // Отображаем результаты по умолчанию (компании)
+        handleSearch();
+    </script>
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -88,21 +193,29 @@
             const loginForm = document.getElementById("login-form");
 
             loginForm.addEventListener("submit", function (event) {
-                event.preventDefault(); // Останавливаем отправку формы
 
                 // Получаем введенные данные
                 const email = document.getElementById("login-email").value;
                 const password = document.getElementById("login-password").value;
-
             });
 
             const registerLink = document.getElementById("register-link");
             registerLink.addEventListener("click", function (event) {
                 event.preventDefault(); // Останавливаем переход по ссылке
-                window.location.href = "registr.html"; // Переход на страницу регистрации
+                window.location.href = "index_page"; // Переход на страницу регистрации
             });
+
+
         });
     </script>
-    <script src="functions.js"></script>
+    <div id="support-modal" class="support-modal">
+        <div class="support-modal-content">
+            <span class="close-support-btn">&times;</span>
+            <h2>Опишите вашу проблему</h2>
+            <textarea id="support-textarea" placeholder="Введите ваш вопрос..."></textarea>
+            <button id="send-support-btn">Отправить</button>
+        </div>
+    </div>
+
 </body>
 </html>

@@ -10,7 +10,7 @@
 <body>
 
     <div class="header">
-        <div class="logo">SkillBridge</div>
+        <div class="logo"><a href="{{ url_for('first_page') }}">SkillBridge</a></div>
         <div class="header-buttons">
             <button onclick="alert('Помощь скоро будет доступна')">Помощь</button>
             <button onclick="logout()">Выйти</button>
@@ -25,10 +25,52 @@
         <h3>Общая информация</h3>
 
         <div class="user-info"> 
-            <p><strong>Название компании:</strong> <span id="user-name">Иван Иванов</span> </p>
-            <p><strong>Имя:</strong> <span id="user-name">Иван Иванов</span> </p>
-            <p><strong>Email:</strong> <span id="user-email">ivan.ivanov@example.com</span> </p>
+            <p><strong>Название компании:</strong> <span id="user-name">{{ company[1] }}</span> </p>
+            <p><strong>Имя:</strong> <span id="user-name">{{ company[2] }}</span> </p>
+            <p><strong>Email:</strong> <span id="user-email">{{ company[2] }}</span> </p>
+            <p><strong>Локация:</strong> <span id="user-email">Томск</span> </p>
         </div>
+
+        <div class="skills-container">
+            <h2>Компетенции работников</h2>
+            
+            <div class="skills-section">
+                <h3>Хард-скиллы</h3>
+                <div class="skills-list" id="hard-skills">
+                    <span class="skill" onclick="selectSkill(this, 'selected-hard-skills')">Ruby</span>
+                    <span class="skill" onclick="selectSkill(this, 'selected-hard-skills')">C#</span>
+                    <span class="skill" onclick="selectSkill(this, 'selected-hard-skills')">C++</span>
+                    <span class="skill" onclick="selectSkill(this, 'selected-hard-skills')">TypeScript</span>
+                    <span class="skill" onclick="selectSkill(this, 'selected-hard-skills')">React</span>
+                    <span class="skill" onclick="selectSkill(this, 'selected-hard-skills')">Python</span>
+                    <span class="skill" onclick="selectSkill(this, 'selected-hard-skills')">JavaScript</span>
+                    <span class="skill" onclick="selectSkill(this, 'selected-hard-skills')">PHP</span>
+                </div>
+            </div>
+            
+            <div class="skills-section">
+                <h3>Софт-скиллы</h3>
+                <div class="skills-list" id="soft-skills">
+                    <span class="skill" onclick="selectSkill(this, 'selected-soft-skills')">Лидерские качества</span>
+                    <span class="skill" onclick="selectSkill(this, 'selected-soft-skills')">Инициативность</span>
+                    <span class="skill" onclick="selectSkill(this, 'selected-soft-skills')">Тайм-менеджмент</span>
+                    <span class="skill" onclick="selectSkill(this, 'selected-soft-skills')">Инициативность</span>
+                    <span class="skill" onclick="selectSkill(this, 'selected-soft-skills')">Работа в команде</span>
+                    <span class="skill" onclick="selectSkill(this, 'selected-soft-skills')">Коммуникабельность</span>
+                    <span class="skill" onclick="selectSkill(this, 'selected-soft-skills')">Креативность</span>
+                    <span class="skill" onclick="selectSkill(this, 'selected-soft-skills')">Дисциплинированность</span>
+                </div>
+            </div>
+            
+            <h3>Выбранные компетенции</h3>
+            
+            
+            <div class="selected-skills-list">
+                <div id="selected-hard-skills" class="selected-skills"></div>
+                <div id="selected-soft-skills" class="selected-skills"></div>
+            </div>
+        </div>
+
 
     </div>
 
@@ -36,7 +78,7 @@
 <div class="right-column">
 
     <div class="container__information2">
-        <h3>Ваш рейтинг</h3>
+        <h3>Рейтинг компании</h3>
         <div class="star-rating">  <!-- Добавляем div с классом star-rating -->
             <i class="fa fa-star" aria-hidden="true"></i>
             <i class="fa fa-star" aria-hidden="true"></i>
@@ -54,10 +96,83 @@
         <span class="field__title">Напишите о своей компании и кого вы хотите видеть в ней:</span>
         <textarea class="field__textarea" name="О себе"></textarea>
       </label>
+      <button class="updateDescriptionButton" id="updateDescriptionButton">Обновить описание</button>
+</div>
+    
+</div>
+</div>
 
+<div class="list">
+    <div class="internship-container">
+        <h2>Cтажировки</h2>
+        
+        <div class="internship-section">
+            <h3>Мои приглашения</h3>
+            <ul class="internship-list">
+                <li class="internship-item">
+                    <span class="company-name">Ипатов В. С.</span>
+                    <span class="internship-date">25.02.2025</span>
+                    <div class="buttons">
+                        <button class="additionaly">Подробнее</button>
+                        
+                    </div>
+                </li>
+                <li class="internship-item">
+                    <span class="company-name">Калугин А. Д."</span>
+                    <span class="internship-date">01.03.2025</span>
+                    <div class="buttons">
+                        <button class="additionaly">Подробнее</button>
+                        
+                    </div>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="internship-section">
+            <h3>Заявки на стажировку</h3>
+            <ul class="internship-list">
+                <li class="internship-item">
+                    <span class="company-name">Голышев А. Д."</span>
+                    <span class="internship-date">20.02.2025</span>
+                    <div class="buttons">
+                        <button class="accept">Принять</button>
+                        <button class="decline">Отказаться</button>
+                    </div>
+                </li>
+                <li class="internship-item">
+                    <span class="company-name">Галаев Г. С."</span>
+                    <span class="internship-date">28.02.2025</span>
+                    <div class="buttons">
+                        <button class="accept">Принять</button>
+                        <button class="decline">Отказаться</button>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
 </div>
+
+<div class="invite__container">
+    <button class="invite__button">Пригласить на стажировку</button>
 </div>
-</div>
+
+<script>
+    function selectSkill(element, targetId) {
+        let target = document.getElementById(targetId);
+        if (element.parentNode === target) {
+            document.getElementById(targetId.replace('selected-', '')).appendChild(element);
+        } else {
+            target.appendChild(element);
+        }
+        updateSelectedSkills();
+    }
+    
+    function updateSelectedSkills() {
+        let selected = document.querySelectorAll('.selected-skills .skill');
+        let skillText = Array.from(selected).map(skill => skill.textContent).join(', ');
+        document.getElementById('selected-skills').value = skillText;
+    }
+</script>
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -81,6 +196,8 @@
       }
     });
   </script>
+
+
 
     </body>
 </html>

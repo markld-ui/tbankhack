@@ -158,3 +158,4 @@ function logout() {
     // Перенаправляем на главную страницу
     window.location.href = "index.html";
 }
+

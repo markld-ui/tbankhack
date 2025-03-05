@@ -24,6 +24,8 @@ def create_database():
             email TEXT NOT NULL UNIQUE,
             password BLOB NOT NULL,
             project TEXT NOT NULL,
+            languages TEXT,
+            description TEXT,
             id_request INTEGER,
             id_rating INTEGER,
             FOREIGN KEY (id_rating) REFERENCES rating(id)
@@ -37,6 +39,7 @@ def create_database():
             comp_name TEXT NOT NULL,
             email TEXT NOT NULL UNIQUE,
             password TEXT NOT NULL,
+            description TEXT,
             min_rating INTEGER NOT NULL,
             rating DOUBLE,
             id_request INTEGER,
@@ -82,12 +85,14 @@ def get_company_by_email(email):
 
 
 class User:
-    def __init__(self, first_name, last_name, email, password, project, id_rating, id_request):
+    def __init__(self, first_name, last_name, email, password, project, languages, description, id_rating, id_request):
         self.first_name = first_name
         self.last_name = last_name
         self.email = email
         self.password = password
         self.project = project
+        self.languages = languages
+        self.description = description
         self.id_rating = id_rating
         self.id_request = id_request
 
@@ -104,9 +109,9 @@ class User:
 
         try:
             cursor.execute('''
-                INSERT INTO users (first_name, last_name, email, password, project, id_rating, id_request)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
-            ''', (self.first_name, self.last_name, self.email, self.password, self.project, self.id_rating, self.id_request))
+                INSERT INTO users (first_name, last_name, email, password, project, languages, description, id_rating, id_request)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ''', (self.first_name, self.last_name, self.email, self.password, self.project, self.languages, self.description, self.id_rating, self.id_request))
 
             conn.commit()
             print("Пользователь успешно добавлен!")
@@ -119,10 +124,11 @@ class User:
             conn.close()
 
 class Company:
-    def __init__(self, comp_name, email, password, min_rating, rating, id_request):
+    def __init__(self, comp_name, email, password, description, min_rating, rating, id_request):
         self.comp_name = comp_name
         self.email = email
         self.password = password
+        self.description = description
         self.min_rating = min_rating
         self.rating = rating
         self.id_request = id_request
@@ -139,9 +145,9 @@ class Company:
 
         try:
             cursor.execute('''
-                INSERT INTO comp (comp_name, email, password, min_rating, rating, id_request)
-                VALUES (?, ?, ?, ?, ?, ?)
-            ''', (self.comp_name, self.email, self.password, self.min_rating, self.rating, self.id_request))
+                INSERT INTO comp (comp_name, email, password, description, min_rating, rating, id_request)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+            ''', (self.comp_name, self.email, self.password, self.description, self.min_rating, self.rating, self.id_request))
 
             conn.commit()
             print("Компания успешно добавлена!")
