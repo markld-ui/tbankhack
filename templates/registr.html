@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация | SkillBridge</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="header">
+        <div class="logo">SkillBridge</div>
+        <div class="header-buttons">
+            <button onclick="alert('Помощь скоро будет доступна')">Помощь</button>
+            <button onclick="alert('Функция входа скоро будет реализована')">Вход</button>
+        </div>
+    </div>
+
+    <div class="wrap_container">
+        <h2 class="title">Регистрация в SkillBridge</h2>
+        <div class="register-box">
+            <button id="employer-btn" class="btn-employer">Я работодатель</button>
+            <button id="trainee-btn" class="btn-trainee">Я стажёр</button>
+        </div>
+    </div>
+
+    <div id="employer-panel" class="register-panel">
+        <div class="panel-content">
+            <span class="close-btn" onclick="closePanel('employer')">&times;</span>
+            <h2>Регистрация работодателя</h2>
+            <form id="employer-form" action="{{ url_for('submit_registration') }}" method="POST">
+                <input type="hidden" name="user_type" value="employer">
+                <input type="text" name="comp_name" placeholder="Название компании" required>
+                <input type="text" name="first_name" placeholder="Имя" required>
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="password" name="password" placeholder="Пароль" required>
+                <button type="submit">Зарегистрироваться</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="trainee-panel" class="register-panel">
+        <div class="panel-content">
+            <span class="close-btn" onclick="closePanel('trainee')">&times;</span>
+            <h2>Регистрация стажёра</h2>
+            <form id="trainee-form" action="{{ url_for('submit_registration') }}" method="POST">
+                <input type="hidden" name="user_type" value="trainee">
+                <input type="text" name="first_name" placeholder="Имя" required>
+                <input type="text" name="last_name" placeholder="Фамилия" required>
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="password" name="password" placeholder="Пароль" required>
+                <button type="submit">Зарегистрироваться</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function openPanel(type) {
+            const openPanels = document.querySelectorAll('.show');
+            openPanels.forEach(panel => {
+                panel.classList.remove('show');
+                setTimeout(() => panel.style.display = 'none', 300);
+            });
+
+            const panel = document.getElementById(`${type}-panel`);
+            panel.style.display = 'flex';
+            setTimeout(() => panel.classList.add('show'), 10);
+        }
+
+        function closePanel(type) {
+            const panel = document.getElementById(`${type}-panel`);
+            panel.classList.remove('show');
+            setTimeout(() => panel.style.display = 'none', 300);
+        }
+
+        document.getElementById("employer-btn").onclick = () => openPanel('employer');
+        document.getElementById("trainee-btn").onclick = () => openPanel('trainee');
+
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(String(email).toLowerCase());
+        }
+
+        function validateEmployerForm() {
+            const email = document.getElementById("employer-email").value;
+            const errorMessage = document.getElementById("employer-error-message");
+            if (!validateEmail(email)) {
+                errorMessage.innerText = "Введите корректный Email!";
+                errorMessage.style.display = "block";
+                return false;
+            }
+            errorMessage.style.display = "none"; // Скрыть сообщение об ошибке, если email корректный
+            return true;
+        }
+
+        function validateTraineeForm() {
+            const email = document.getElementById("trainee-email").value;
+            const errorMessage = document.getElementById("trainee-error-message");
+            if (!validateEmail(email)) {
+                errorMessage.innerText = "Введите корректный Email!";
+                errorMessage.style.display = "block";
+                return false;
+            }
+            errorMessage.style.display = "none"; // Скрыть сообщение об ошибке, если email корректный
+            return true;
+        }
+    </script>
+</body>
+</html>

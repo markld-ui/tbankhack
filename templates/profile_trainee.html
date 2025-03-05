@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillBridge</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+
+    <div class="header">
+        <div class="logo">SkillBridge</div>
+        <div class="header-buttons">
+            <button onclick="alert('Помощь скоро будет доступна')">Помощь</button>
+            <button onclick="alert('Функция входа скоро будет реализована')">Вход</button>
+        </div>
+    </div>
+
+    <h1 class="page__title">Личный кабинет</h1>
+
+    <div class="container">
+    
+    <div class="information container__information1">
+        <h3>Общая информация</h3>
+
+        <div class="user-info">
+            <div class="section-title">Основная информация</div>
+            <p><strong>Имя:</strong> <span id="user-name">Иван Иванов</span> </p>
+            <p><strong>Фамилия:</strong> <span id="user-name">Иван Иванов</span> </p>
+            <p><strong>Email:</strong> <span id="user-email">ivan.ivanov@example.com</span> </p>
+            <p><strong>Языки программирования:</strong> <span id="lang">Php</span> </p> 
+            <a href="#" class="edit-link">Изменить</a>
+        </div>
+
+    </div>
+
+
+<div class="right-column">
+
+    <div class="container__information2">
+        <h3> Ваш рейтинг</h3>
+    </div>
+
+<div class="form container__information3">
+
+    <label class="field form__field">
+        <span class="field__title">Напишите о своих сильных сторонах и интересных проектах:</span>
+        <textarea class="field__textarea" name="О себе"></textarea>
+      </label>
+
+</div>
+    
+</div>
+</div>
+
+    </body>

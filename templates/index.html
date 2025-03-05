@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillBridge</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+
+    <div class="header">
+        <div class="logo">SkillBridge</div>
+        <div class="header-buttons">
+            <button onclick="alert('Помощь скоро будет доступна')">Помощь</button>
+            <button id="login-btn">Вход</button>
+        </div>
+    </div>
+    <main class="information">
+        <div class="information_block">
+            <p><strong>SkillBridge</strong> — это удобный онлайн-сервис, который помогает соискателям и работодателям найти друг друга.</p>
+            <ul>
+                <li>Если вы в поиске работы, платформа предложит вам персонализированные вакансии, удобные инструменты фильтрации и возможность прямого общения с работодателями.</li>
+                <li>Если вы компания, вам будет доступна база талантливых специалистов и интеллектуальные инструменты подбора персонала. Присоединяйтесь и открывайте новые карьерные и бизнес-возможности уже сегодня!</li>
+            </ul>
+        </div>
+    </main>
+    <section class="how-it-works">
+        <h2>Как это работает?</h2>
+        <div class="roles">
+            <div class="role">
+                <h3>Для стажеров: </h3>
+                <ul>
+                    <li><strong>Создайте профиль</strong> – укажите навыки, образование и желаемую вакансию.</li>
+                    <li><strong>Найдите подходящие стажировки</strong> – воспользуйтесь удобными фильтрами.</li>
+                    <li><strong>Откликайтесь на вакансии</strong> – отправляйте резюме в один клик.</li>
+                    <li><strong>Связывайтесь с работодателем</strong> – обсуждайте детали и проходите собеседование.</li>
+                    <li><strong>Начинайте карьеру</strong> – получайте опыт и развивайтесь в профессии!</li>
+                </ul>
+            </div>
+            <div class="role">
+                <h3>Для работодателей: </h3>
+                <ul>
+                    <li><strong>Разместите вакансию</strong> – опишите требования и условия стажировки.</li>
+                    <li><strong>Просматривайте анкеты</strong> – выбирайте лучших кандидатов по навыкам и опыту.</li>
+                    <li><strong>Общайтесь с соискателями</strong> – быстро договаривайтесь о встречах и собеседованиях.</li>
+                    <li><strong>Нанимайте талантливых специалистов</strong> – находите перспективных сотрудников для компании.</li>
+                </ul>
+            </div>
+        </div>
+        <p class="cta"> <strong>SkillBridge</strong> – это удобный способ <strong>найти работу или подобрать специалистов</strong> для вашей команды! </p>
+    </section>
+    
+    <!-- Выдвижное модальное окно -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span id="close-login" class="close-btn">&times;</span>
+            <h2>Вход в SkillBridge</h2>
+            <form id="login-form" action="{{ url_for('login') }}" method="POST">
+                <input type="email" id="login-email" name="login-email" placeholder="Логин" required>
+                <input type="password" id="login-password" name="login-password" placeholder="Пароль" required>
+                <button type="submit">Войти</button>
+            </form>
+            <p class="register-text">Нет аккаунта? <a href="{{ url_for('index_page') }}">Зарегистрироваться</a></p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Окно входа
+            const loginModal = document.getElementById("loginModal");
+            const loginBtn = document.getElementById("login-btn");
+            const closeBtn = document.getElementById("close-login");
+
+            function openLoginPanel() {
+                loginModal.style.display = "flex";
+                setTimeout(() => loginModal.classList.add("show"), 10);
+            }
+
+            function closeLoginPanel() {
+                loginModal.classList.remove("show");
+                setTimeout(() => loginModal.style.display = "none", 300);
+            }
+
+            if (loginBtn) loginBtn.addEventListener("click", openLoginPanel);
+            if (closeBtn) closeBtn.addEventListener("click", closeLoginPanel);
+        });
+    </script>
+
+</body>
+</html>
