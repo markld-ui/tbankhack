@@ -62,10 +62,10 @@ def create_database():
 
     # Добавляем пользователя
     user = User(
-        first_name="Рома",
+        first_name="Роман",
         last_name="Слиньков",
-        email="thankr3@gmail.com",
-        password=bcrypt.hashpw("Hjvfy3105".encode('utf-8'), bcrypt.gensalt()),
+        email="user@gmail.com",
+        password=bcrypt.hashpw("Qwerty355".encode('utf-8'), bcrypt.gensalt()),
         project="Python-backend разработка",
         languages="Python, C#, C++, Java",
         description="Python-backend разработчик, учусь в IT-Academy",
@@ -77,7 +77,7 @@ def create_database():
     # Добавляем компанию
     company = Company(
         comp_name='АО "Т-Банк"',
-        email="geo@gmail.com",
+        email="company@gmail.com",
         password=bcrypt.hashpw("Qwerty355".encode('utf-8'), bcrypt.gensalt()),
         languages="Python, C#, C++, Java, Scala, JavaScript",
         description="Российский коммерческий банк, сфокусированный полностью на дистанционном обслуживании, не имеющий розничных отделений.",
