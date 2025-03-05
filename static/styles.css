@@ -1159,3 +1159,72 @@ img {
         opacity: 1;
     }
 }
+
+/* Стили для модального окна поддержки */
+.support-modal {
+    display: none; /* Скрываем по умолчанию */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Затемнение фона */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.support-modal.show {
+    opacity: 1;
+}
+
+.support-modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    width: 400px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.close-support-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #555;
+}
+
+.close-support-btn:hover {
+    color: #000;
+}
+
+.support-modal textarea {
+    width: 100%;
+    height: 100px;
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    resize: none;
+}
+
+.support-modal button {
+    background: #000;
+    color: #FFD700;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+}
+
+.support-modal button:hover {
+    background: #000;
+}

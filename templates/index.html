@@ -21,7 +21,7 @@
     <div class="header">
         <div class="logo"><a href="{{ url_for('first_page') }}">SkillBridge</a></div>
         <div class="header-buttons">
-            <button onclick="alert('Помощь скоро будет доступна')">Помощь</button>
+            <button onclick="openSupportModal()">Помощь</button>
             <button id="login-btn">Вход</button>
         </div>
     </div>
@@ -94,6 +94,15 @@
         </div>
     </div>
 
+    <div id="support-modal" class="support-modal">
+        <div class="support-modal-content">
+            <span class="close-support-btn">&times;</span>
+            <h2>Опишите вашу проблему</h2>
+            <textarea id="support-textarea" placeholder="Введите ваш вопрос..."></textarea>
+            <button id="send-support-btn">Отправить</button>
+        </div>
+    </div>
+
     <script>
         const searchInput = document.getElementById('searchInput');
         const searchTypeRadios = document.getElementsByName('searchType');
@@ -104,14 +113,14 @@
             { name: 'SoftDev', compatibility: 85, detailsUrl: '' },
             { name: 'FutureTech', compatibility: 85, detailsUrl: '' },
             { name: 'TechCorp', compatibility: 30, detailsUrl: '' },
-            { name: 'InnovateX', compatibility: 55, detailsUrl: '#' }
+            { name: 'InnovateX', compatibility: 55, detailsUrl: '' }
         ];
 
         const trainees = [
-            { name: 'Иван Иванов', compatibility: 45, detailsUrl: '#' },
-            { name: 'Петр Петров', compatibility: 25, detailsUrl: '#' },
-            { name: 'Анна Сидорова', compatibility: 85, detailsUrl: '#' },
-            { name: 'Елена Смирнова', compatibility: 90, detailsUrl: '#' }
+            { name: 'Иван Иванов', compatibility: 45, detailsUrl: '' },
+            { name: 'Петр Петров', compatibility: 25, detailsUrl: '' },
+            { name: 'Анна Сидорова', compatibility: 85, detailsUrl: '' },
+            { name: 'Елена Смирнова', compatibility: 90, detailsUrl: '' }
         ];
 
         // Функция для отображения результатов
@@ -235,14 +244,46 @@
         document.addEventListener('DOMContentLoaded', hideFlashMessages);
     </script>
 
-    <div id="support-modal" class="support-modal">
-        <div class="support-modal-content">
-            <span class="close-support-btn">&times;</span>
-            <h2>Опишите вашу проблему</h2>
-            <textarea id="support-textarea" placeholder="Введите ваш вопрос..."></textarea>
-            <button id="send-support-btn">Отправить</button>
-        </div>
-    </div>
-
+    <script>
+        // Функция для открытия модального окна поддержки
+        function openSupportModal() {
+            const supportModal = document.getElementById('support-modal');
+            supportModal.style.display = 'flex';
+            setTimeout(() => supportModal.classList.add('show'), 10);
+        }
+    
+        // Функция для закрытия модального окна поддержки
+        function closeSupportModal() {
+            const supportModal = document.getElementById('support-modal');
+            supportModal.classList.remove('show');
+            setTimeout(() => supportModal.style.display = 'none', 300);
+        }
+    
+        // Закрытие модального окна при клике на крестик
+        document.querySelector('.close-support-btn').addEventListener('click', closeSupportModal);
+    
+        // Закрытие модального окна при клике вне его области
+        window.addEventListener('click', (event) => {
+            const supportModal = document.getElementById('support-modal');
+            if (event.target === supportModal) {
+                closeSupportModal();
+            }
+        });
+    
+        // Обработчик отправки формы
+        document.getElementById('send-support-btn').addEventListener('click', function (event) {
+            event.preventDefault(); // Предотвращаем отправку формы
+            const textarea = document.getElementById('support-textarea');
+            const message = textarea.value.trim();
+    
+            if (message) {
+                alert('Ваш вопрос отправлен! Мы свяжемся с вами в ближайшее время.');
+                textarea.value = ''; // Очищаем текстовое поле
+                closeSupportModal(); // Закрываем модальное окно
+            } else {
+                alert('Пожалуйста, введите ваш вопрос.');
+            }
+        });
+    </script>
 </body>
 </html>
