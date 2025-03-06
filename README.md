@@ -34,7 +34,7 @@
 
 ## Пощупать проект
 
-*Ссылка на сайт:* https://tbankhack.onrender.com/
+*Ссылка на сайт:* https://tbankhack-m1gh.onrender.com/
 
 *Стажер:*
 - *login:* user@gmail.com
