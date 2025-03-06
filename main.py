@@ -134,7 +134,7 @@ def submit_registration():
             return redirect(url_for('index_page'))
 
         hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())  # Хэшируем пароль
-        company = Company(comp_name, email, hashed_password, "", "", "", 0, 0.0, None)
+        company = Company(comp_name, email, hashed_password, "", "", "", "", 0, 0, 0, 0.0, None)
         company.add_comp()
         app.logger.info(f"Employer registered: {comp_name} with email: {email}")
         flash("Регистрация прошла успешно!", "success")
@@ -154,7 +154,7 @@ def submit_registration():
             return redirect(url_for('index_page'))
 
         hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())  # Хэшируем пароль
-        user = User(first_name, last_name, email, hashed_password, "", "", "", "", None, None)
+        user = User(first_name, last_name, email, hashed_password, "", "", "", "", "", None, None)
         user.add_user()
         app.logger.info(f"Trainee registered: {first_name} {last_name} with email: {email}")
         flash("Регистрация прошла успешно!", "success")
