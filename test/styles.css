@@ -1,4 +1,5 @@
 * {
+    
     padding: 0;
     box-sizing: border-box;
     font-family: Arial, sans-serif;
@@ -19,7 +20,6 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background: url('/src/images/istockphoto-527543742-170667a.jpg') no-repeat center center/cover;
     filter: blur(15px); 
     opacity: 0.3; 
     z-index: -1;
@@ -116,15 +116,127 @@ body::before {
     font-size: 18px;
 }
 
-
-.wrap_container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    width: 100%;
-    margin-top: 30px;
+.login-container {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 400px; /* Сделал немного уже для лучшего вида */
+    position: absolute; 
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Центрирование по середине */
 }
+
+/* Стиль для затемнённого фона */
+.modal {
+    display: none; /* Скрываем по умолчанию */
+    position: fixed; 
+    z-index: 1000; 
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Затемнение фона */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Контейнер окна */
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    width: 400px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+/* Кнопка закрытия */
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #333;
+}
+
+
+.close-btn:hover {
+    color: red;
+}
+
+/* Стили для кнопок */
+.btn-trainee, .btn-employer {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+}
+
+.btn-trainee {
+    background: #4CAF50;
+    color: white;
+}
+
+.btn-employer {
+    background: #008CBA;
+    color: white;
+}
+
+.btn-trainee:hover {
+    background: #45a049;
+}
+
+.btn-employer:hover {
+    background: #007bb5;
+}
+
+
+.login-container h2 {
+    margin-bottom: 15px;
+}
+
+.login-container input {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.login-container button {
+    width: 100%;
+    padding: 10px;
+    background: #FFD700;
+    color: rgb(0, 0, 0);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.login-container button:hover {
+    background:#8e29b9;
+}
+
+.register-text {
+    margin-top: 10px;
+}
+
+.register-text a {
+    color: #3498db;
+    text-decoration: none;
+    cursor: pointer;
+}
+
 .register-box {
     background: white;
     padding: 40px;
@@ -158,6 +270,7 @@ body::before {
 }
 /* Выдвижная панель */
 .register-panel {
+    display: none;
     position: fixed;
     top: 0;
     right: -400px;
@@ -230,7 +343,7 @@ form button {
 }
 
 form button:hover {
-    background: #333333;
+    background:#333333;
 }
 
 label:hover {
@@ -246,7 +359,7 @@ input[type="checkbox"] {
 
 .information {
     padding: 20px;
-    max-width: 800px;
+    max-width: 1300px;
     margin: 30px auto;
     background: white;
     border-radius: 10px;
@@ -632,15 +745,15 @@ margin-bottom: 10px;
 
 .skill {
 padding: 8px 12px;
-background: #3498db;
-color: white;
+background: #FFD700;
+color: rgb(0, 0, 0);
 border-radius: 20px;
 cursor: pointer;
 display: inline-block;
 }
 
 .skill:hover {
-background: #2980b9;
+background: #8e29b9;
 }
 
 .selected-skills {
@@ -920,4 +1033,148 @@ form button:hover {
 
 .result-rating.low {
     color: #f44336; /* Красный */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.save-button {
+    background-color: #000000; 
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.save-button:hover {
+    background-color: #8e29b9;
+    transform: scale(1.05);
+}
+
+.save-button:active {
+    background-color: #8e29b9;
+    transform: scale(0.98);
+}
+
+
+/* Основные стили для модального окна */
+.modal1 {
+    display: none; /* Изначально скрыто */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Полупрозрачный затемняющий фон */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.3s ease-in-out; /* Плавное изменение прозрачности */
+}
+
+.modal.show {
+    display: flex; /* Показываем окно при добавлении класса show */
+}
+
+/* Контейнер для модального окна */
+.modal-content {
+    background: #fff;
+    padding: 40px;
+    border-radius: 12px;
+    width: 80%;
+    max-width: 600px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Тень для глубины */
+    position: relative;
+    animation: fadeIn 0.5s ease; /* Анимация появления */
+    font-family: 'Arial', sans-serif;
+}
+
+/* Анимация появления модального окна */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Стиль для кнопки закрытия */
+.close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 30px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close:hover {
+    color: #ff5c5c; /* Цвет при наведении на крестик */
+}
+
+/* Заголовок модального окна */
+.modal-content h2 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 600;
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 20px;
+    text-transform: uppercase; /* Сделаем заголовок заглавными буквами */
+    letter-spacing: 1px; /* Добавим небольшие интервалы между буквами */
+}
+
+/* Стили для текста в модальном окне */
+#resumeText {
+    font-size: 20px;
+    line-height: 1.7;
+    color: #555;
+    margin-bottom: 20px;
+    text-align: justify; /* Текст выравнивается по ширине */
+    word-wrap: break-word; /* Перенос длинных слов */
+}
+
+/* Добавление отступов между строками в резюме */
+#resumeText strong {
+    font-weight: bold;
+    color: #333;
+}
+
+/* Добавление кнопки закрытия */
+.modal-overlay {
+    background-color: rgba(0, 0, 0, 0.5); /* Фон для затемнения */
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 999; /* Чтобы фон был за модальным окном */
 }

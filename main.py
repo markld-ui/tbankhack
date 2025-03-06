@@ -134,7 +134,7 @@ def submit_registration():
             return redirect(url_for('index_page'))
 
         hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())  # Хэшируем пароль
-        company = Company(comp_name, email, hashed_password, "", "", 0, 0.0, None)
+        company = Company(comp_name, email, hashed_password, "", "", "", 0, 0.0, None)
         company.add_comp()
         app.logger.info(f"Employer registered: {comp_name} with email: {email}")
         flash("Регистрация прошла успешно!", "success")
@@ -149,13 +149,12 @@ def submit_registration():
         first_name = request.form.get('first_name')
         last_name = request.form.get('last_name')
         password = request.form.get('password')
-        languages = request.form.get('languages', '')
-        if not first_name or not last_name or not password or not languages:
+        if not first_name or not last_name or not password:
             flash("Все поля обязательны для заполнения.", "error")
             return redirect(url_for('index_page'))
 
         hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())  # Хэшируем пароль
-        user = User(first_name, last_name, email, hashed_password, "", languages, "", None, None)
+        user = User(first_name, last_name, email, hashed_password, "", "", "", "", None, None)
         user.add_user()
         app.logger.info(f"Trainee registered: {first_name} {last_name} with email: {email}")
         flash("Регистрация прошла успешно!", "success")
@@ -179,11 +178,13 @@ def login():
 
     if user and bcrypt.checkpw(password.encode('utf-8'), user[4]):  # user[4] is already in bytes
         session['email'] = email
+        session['user_type'] = 'trainee'
         app.logger.info(f"Trainee logged in: {email}")
         flash("Вход выполнен успешно!", "success")
         return redirect(url_for('profile_trainee_page'))  # Перенаправление на страницу профиля стажера
     elif company and bcrypt.checkpw(password.encode('utf-8'), company[3]):  # company[3] is already in bytes
         session['email'] = email
+        session['user_type'] = 'employer'
         app.logger.info(f"Employer logged in: {email}")
         flash("Вход выполнен успешно!", "success")
         return redirect(url_for('profile_employer_page'))  # Перенаправление на страницу профиля работодателя
@@ -196,8 +197,58 @@ def login():
 @app.route("/logout")
 def logout():
     app.logger.debug(f"User  logged out: {session.get('email')}")
-    session.pop('email', None)
+    session.clear()
     return redirect(url_for('first_page'))
+
+
+@app.after_request
+def add_no_cache_headers(response):
+    if 'Cache-Control' not in response.headers:
+        response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+        response.headers['Pragma'] = 'no-cache'
+        response.headers['Expires'] = '-1'
+    return response
+
+
+@app.route("/save_skills", methods=['POST'])
+def save_skills():
+    if 'email' not in session:
+        app.logger.warning("Unauthorized access attempt to save skills")
+        return redirect(url_for('first_page'))
+
+    email = session['email']
+    user_type = session['user_type']
+    hard_skills = request.form.get('hard_skills', '')
+    soft_skills = request.form.get('soft_skills', '')
+
+    conn = sqlite3.connect('people_db.db')
+    cursor = conn.cursor()
+
+    try:
+        if user_type == 'trainee':
+            cursor.execute('''
+                UPDATE users
+                SET hard_skills = ?, soft_skills = ?
+                WHERE email = ?
+            ''', (hard_skills, soft_skills, email))
+        elif user_type == 'employer':
+            cursor.execute('''
+                UPDATE comp
+                SET hard_skills = ?, soft_skills = ?
+                WHERE email = ?
+            ''', (hard_skills, soft_skills, email))
+
+        conn.commit()
+        app.logger.info(f"Skills updated for user: {email}")
+        flash('Навыки успешно обновлены!', 'success')
+    except Exception as e:
+        app.logger.error(f"Error updating skills: {e}")
+        flash('Ошибка при обновлении навыков.', 'error')
+    finally:
+        cursor.close()
+        conn.close()
+
+    return redirect(url_for('profile_trainee_page' if user_type == 'trainee' else 'profile_employer_page'))
 
 
 if __name__ == "__main__":

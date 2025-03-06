@@ -11,32 +11,29 @@
         <div class="logo">SkillBridge</div>
         <div class="header-buttons">
             <button onclick="alert('Помощь скоро будет доступна')">Помощь</button>
-            <button onclick="alert('Функция входа скоро будет реализована')">Вход</button>
         </div>
     </div>
 
-    <div class="wrap_container">
-        <h2 class="title">Регистрация в SkillBridge</h2>
-        <div class="register-box">
-            <button id="employer-btn" class="btn-employer">Я работодатель</button>
+    <div class="login-container">
+        <h2>Вход в SkillBridge</h2>
+        <form id="login-form">
+            <input type="email" placeholder="Email" required>
+            <input type="password" placeholder="Пароль" required>
+            <button type="submit">Войти</button>
+        </form>
+        <p class="register-text">Нет аккаунта? <a href="#" id="register-link">Зарегистрируйтесь</a></p>
+    </div>
+
+    <div id="register-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="close-register">&times;</span>
+            <h2>Регистрация в SkillBridge</h2>
             <button id="trainee-btn" class="btn-trainee">Я стажёр</button>
+            <button id="employer-btn" class="btn-employer">Я работодатель</button>
         </div>
     </div>
 
-    <div id="employer-panel" class="register-panel">
-        <div class="panel-content">
-            <span class="close-btn" onclick="closePanel('employer')">&times;</span>
-            <h2>Регистрация работодателя</h2>
-            <form id="employer-form">
-                <input type="text" placeholder="Название компании" required>
-                <input type="text" placeholder="Имя" required>
-                <input type="email" placeholder="Email" required>
-                <input type="password" placeholder="Пароль" required>
-                <button type="submit">Зарегистрироваться</button>
-            </form>
-        </div>
-    </div>
-
+    <!-- Панель регистрации стажёра -->
     <div id="trainee-panel" class="register-panel">
         <div class="panel-content">
             <span class="close-btn" onclick="closePanel('trainee')">&times;</span>
@@ -51,47 +48,74 @@
         </div>
     </div>
 
+    <!-- Панель регистрации работодателя -->
+    <div id="employer-panel" class="register-panel">
+        <div class="panel-content">
+            <span class="close-btn" onclick="closePanel('employer')">&times;</span>
+            <h2>Регистрация работодателя</h2>
+            <form id="employer-form">
+                <input type="text" placeholder="Название компании" required>
+                <input type="text" placeholder="Имя" required>
+                <input type="email" placeholder="Email" required>
+                <input type="password" placeholder="Пароль" required>
+                <button type="submit">Зарегистрироваться</button>
+            </form>
+        </div>
+    </div>
+
     <script>
-        function openPanel(type) {
-            // Закрываем любую открытую панель перед открытием новой
-            const openPanels = document.querySelectorAll('.show');
-            openPanels.forEach(panel => {
-                panel.classList.remove('show');
-                setTimeout(() => panel.style.display = 'none', 300);
+        document.addEventListener("DOMContentLoaded", function () {
+            const registerModal = document.getElementById("register-modal");
+            const registerLink = document.getElementById("register-link");
+            const closeRegister = document.getElementById("close-register");
+    
+            function openRegisterModal() {
+                registerModal.style.display = "flex";
+                setTimeout(() => registerModal.classList.add("show"), 10);
+            }
+    
+            function closeRegisterModal() {
+                registerModal.classList.remove("show");
+                setTimeout(() => registerModal.style.display = "none", 300);
+            }
+    
+            registerLink.addEventListener("click", function (event) {
+                event.preventDefault();
+                openRegisterModal();
             });
     
-            const panel = document.getElementById(`${type}-panel`);
-            panel.style.display = 'flex';
-            setTimeout(() => panel.classList.add('show'), 10);
-        }
-        
-        function closePanel(type) {
-            const panel = document.getElementById(`${type}-panel`);
-            panel.classList.remove('show');
-            setTimeout(() => panel.style.display = 'none', 300);
-        }
-
-        // Функции для обработки отправки форм и перенаправления на личный кабинет
-        function handleEmployerSubmit(event) {
-            event.preventDefault(); // Предотвращаем стандартную отправку формы
-            // Здесь можно добавить код для обработки данных формы работодателя
-            window.location.href = "profile_employer.html"; // Переход на личный кабинет работодателя
-        }
-
-        function handleTraineeSubmit(event) {
-            event.preventDefault(); // Предотвращаем стандартную отправку формы
-            // Здесь можно добавить код для обработки данных формы стажёра
-            window.location.href = "profile_trainee.html"; // Переход на личный кабинет стажёра
-        }
-
-        document.getElementById("employer-btn").onclick = () => openPanel('employer');
-        document.getElementById("trainee-btn").onclick = () => openPanel('trainee');
-
-        // Добавляем обработчики для отправки форм
-        document.getElementById("employer-form").addEventListener("submit", handleEmployerSubmit);
-        document.getElementById("trainee-form").addEventListener("submit", handleTraineeSubmit);
+            closeRegister.addEventListener("click", closeRegisterModal);
+    
+            // Открытие панелей регистрации
+            document.getElementById("trainee-btn").onclick = () => openPanel('trainee');
+            document.getElementById("employer-btn").onclick = () => openPanel('employer');
+    
+            function openPanel(type) {
+                closeRegisterModal();
+                const panel = document.getElementById(type + '-panel');
+                panel.style.display = "flex";
+                setTimeout(() => panel.classList.add("show"), 10);
+            }
+    
+            function closePanel(type) {
+                const panel = document.getElementById(type + '-panel');
+                panel.classList.remove("show");
+                setTimeout(() => panel.style.display = "none", 300);
+            }
+    
+            // Обработчики форм
+            document.getElementById("trainee-form").addEventListener("submit", function (event) {
+                event.preventDefault();
+                window.location.href = "profile_trainee.html";
+            });
+    
+            document.getElementById("employer-form").addEventListener("submit", function (event) {
+                event.preventDefault();
+                window.location.href = "profile_employer.html";
+            });
+        });
     </script>
-
+    
 <div id="support-modal" class="support-modal">
     <div class="support-modal-content">
         <span class="close-support-btn">&times;</span>
@@ -103,4 +127,3 @@
 
 </body>
 </html>
-

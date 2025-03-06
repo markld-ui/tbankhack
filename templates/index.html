@@ -23,10 +23,14 @@
     {% endwith %}
 
     <div class="header">
-        <div class="logo"><a href="{{ url_for('first_page') }}">SkillBridge</a></div>
+        <div class="logo">SkillBridge</div>
         <div class="header-buttons">
             <button onclick="openSupportModal()">Помощь</button>
-            <button id="login-btn">Вход</button>
+            {% if 'email' in session %}
+                <button onclick="logout()">Выйти</button>
+            {% else %}
+                <button id="login-btn">Вход</button>
+            {% endif %}
         </div>
     </div>
 
@@ -39,7 +43,7 @@
             </ul>
         </div>
     </main>
-
+    
     <section class="how-it-works">
         <h2>Как это работает?</h2>
         <div class="roles">
@@ -107,6 +111,38 @@
         </div>
     </div>
 
+    <footer>
+        <div class="footer-content">
+          <div class="footer-left">
+            <p>&copy; SkiiBridge 2025</p>
+          </div>
+      
+          <div class="footer-center">
+            <div class="footer-section">
+              <h3>О нас</h3>
+              <a href="#" class="footer-button">Наша миссия</a>
+              <a href="#" class="footer-button">Команда</a>
+            </div>
+      
+            <div class="footer-section">
+              <h3>Работодателям</h3>
+              <a href="#" class="footer-button">Разместить вакансию</a>
+              <a href="#" class="footer-button">Найти сотрудников</a>
+            </div>
+      
+            <div class="footer-section">
+              <h3>Стажерам</h3>
+              
+              <a href="#" class="footer-button">Полезные статьи</a>
+            </div>
+          </div>
+      
+          <div class="footer-right">
+            <!-- Здесь может быть дополнительный контент справа -->
+          </div>
+        </div>
+      </footer>
+
     <script>
         const searchInput = document.getElementById('searchInput');
         const searchTypeRadios = document.getElementsByName('searchType');
@@ -155,9 +191,9 @@
         `;
         resultsList.appendChild(listItem);
     });
-
+    
 }
-
+    
         // Функция для фильтрации результатов
         function filterResults(searchTerm, searchType) {
             const data = searchType === 'companies' ? companies : trainees;
@@ -166,7 +202,7 @@
             );
             return filtered;
         }
-
+    
         // Функция для обработки ввода в поле поиска и смены переключателя
         function handleSearch() {
             const searchTerm = searchInput.value;
@@ -177,11 +213,11 @@
                     break;
                 }
             }
-
+    
             const results = filterResults(searchTerm, searchType);
             displayResults(results);
         }
-
+    
         // Привязываем обработчик к полю поиска и переключателям
         searchInput.addEventListener('input', handleSearch);
         for (const radio of searchTypeRadios) {
@@ -288,6 +324,22 @@
                 alert('Пожалуйста, введите ваш вопрос.');
             }
         });
+    </script>
+
+    <script>
+        function logout() {
+            fetch("{{ url_for('logout') }}", {
+                method: "GET",
+            })
+            .then(response => {
+                if (response.redirected) {
+                    window.location.href = response.url;  // Перенаправление после выхода
+                }
+            })
+            .catch(error => {
+                console.error("Ошибка при выходе:", error);
+            });
+        }
     </script>
 </body>
 </html>

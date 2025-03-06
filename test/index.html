@@ -12,7 +12,7 @@
         <div class="logo">SkillBridge</div>
         <div class="header-buttons">
             <button onclick="alert('Помощь скоро будет доступна')">Помощь</button>
-            <button id="login-btn">Вход</button>
+            <button onclick="window.location.href='registr.html'">Вход</button>
         </div>
     </div>
     
@@ -70,19 +70,6 @@
         </div>
     </div>
 
-    <!-- Выдвижное модальное окно -->
-    <div id="loginModal" class="modal">
-        <div class="modal-content">
-            <span id="close-login" class="close-btn">&times;</span>
-            <h2>Вход в SkillBridge</h2>
-            <form id="login-form">
-                <input type="email" id="login-email" placeholder="Логин" required>
-                <input type="password" id="login-password" placeholder="Пароль" required>
-                <button type="submit">Войти</button>
-            </form>
-            <p class="register-text">Нет аккаунта? <a href="#" id="register-link">Зарегистрироваться</a></p>
-        </div>
-    </div>
 
     <script>
         const searchInput = document.getElementById('searchInput');

@@ -24,10 +24,14 @@
     {% endwith %}
 
     <div class="header">
-        <div class="logo"><a href="{{ url_for('first_page') }}">SkillBridge</a></div>
+        <div class="logo">SkillBridge</div>
         <div class="header-buttons">
-            <button onclick="alert('Помощь скоро будет доступна')">Помощь</button>
-            <button onclick="logout()">Выйти</button>
+            <button onclick="openSupportModal()">Помощь</button>
+            {% if 'email' in session %}
+                <button onclick="logout()">Выйти</button>
+            {% else %}
+                <button id="login-btn">Вход</button>
+            {% endif %}
         </div>
     </div>
 
@@ -42,10 +46,9 @@
             <p><strong>Имя:</strong> <span id="user-name">{{ user[1] }}</span> </p>
             <p><strong>Фамилия:</strong> <span id="user-name">{{ user[2] }}</span> </p>
             <p><strong>Email:</strong> <span id="user-email">{{ user[3] }}</span> </p>
-            <p><strong>Языки программирования:</strong> <span id="lang">{{ user[6] }}</span> </p>
-            <p><strong>Описание:</strong> <span id="description">{{ user[7] }}</span> </p>
-            <p><strong>Город:</strong> <span id="city">Томск</span> </p>
-            <a href="#" class="edit-link">Изменить</a>
+            <p><strong>Софт-скиллы:</strong> <span id="lang">{{ user[7] }}</span> </p>
+            <p><strong>Хард-скиллы:</strong> <span id="description">{{ user[6] }}</span> </p>
+            <p><strong>Город:</strong> <span id="city">Томск</span> <a href="#" class="edit-link">Изменить</a> </p>
         </div>
         <div class="skills-container">
             <h2>Выбор компетенций</h2>
@@ -61,6 +64,15 @@
                     <span class="skill" onclick="selectSkill(this, 'selected-hard-skills')">Python</span>
                     <span class="skill" onclick="selectSkill(this, 'selected-hard-skills')">JavaScript</span>
                     <span class="skill" onclick="selectSkill(this, 'selected-hard-skills')">PHP</span>
+                    <span class="skill" onclick="selectSkill(this, 'selected-hard-skills')">SQL</span>
+                    <span class="skill" onclick="selectSkill(this, 'selected-hard-skills')">Node.js</span>
+                    <span class="skill" onclick="selectSkill(this, 'selected-hard-skills')">Docker</span>
+                    <span class="skill" onclick="selectSkill(this, 'selected-hard-skills')">Kubernetes</span>
+                    <span class="skill" onclick="selectSkill(this, 'selected-hard-skills')">GraphQL</span>
+                    <span class="skill" onclick="selectSkill(this, 'selected-hard-skills')">Swift</span>
+                    <span class="skill" onclick="selectSkill(this, 'selected-hard-skills')">Go</span>
+                    <span class="skill" onclick="selectSkill(this, 'selected-hard-skills')">CI/CD</span>
+                    <span class="skill" onclick="selectSkill(this, 'selected-hard-skills')">REST API</span>
                 </div>
             </div>
             
@@ -70,11 +82,15 @@
                     <span class="skill" onclick="selectSkill(this, 'selected-soft-skills')">Лидерские качества</span>
                     <span class="skill" onclick="selectSkill(this, 'selected-soft-skills')">Инициативность</span>
                     <span class="skill" onclick="selectSkill(this, 'selected-soft-skills')">Тайм-менеджмент</span>
-                    <span class="skill" onclick="selectSkill(this, 'selected-soft-skills')">Инициативность</span>
                     <span class="skill" onclick="selectSkill(this, 'selected-soft-skills')">Работа в команде</span>
                     <span class="skill" onclick="selectSkill(this, 'selected-soft-skills')">Коммуникабельность</span>
                     <span class="skill" onclick="selectSkill(this, 'selected-soft-skills')">Креативность</span>
                     <span class="skill" onclick="selectSkill(this, 'selected-soft-skills')">Дисциплинированность</span>
+                    <span class="skill" onclick="selectSkill(this, 'selected-soft-skills')">Критическое мышление</span>
+                    <span class="skill" onclick="selectSkill(this, 'selected-soft-skills')">Управление конфликтами</span>
+                    <span class="skill" onclick="selectSkill(this, 'selected-soft-skills')">Адаптивность</span>
+                    <span class="skill" onclick="selectSkill(this, 'selected-soft-skills')">Обучаемость</span>
+                    <span class="skill" onclick="selectSkill(this, 'selected-soft-skills')">Переговорные навыки</span>
                 </div>
             </div>
             
@@ -84,6 +100,9 @@
             <div class="selected-skills-list">
                 <div id="selected-hard-skills" class="selected-skills"></div>
                 <div id="selected-soft-skills" class="selected-skills"></div>
+            </div>
+            <div class="save">
+                <button class="save-button" onclick="saveSkills()">Сохранить</button>
             </div>
         </div>
 
@@ -166,7 +185,47 @@
     </div>
 </div>
 
+<!-- Модальное окно поддержки -->
+<div id="support-modal" class="support-modal">
+    <div class="support-modal-content">
+        <span class="close-support-btn">&times;</span>
+        <h2>Опишите вашу проблему</h2>
+        <textarea id="support-textarea" placeholder="Введите ваш вопрос..."></textarea>
+        <button id="send-support-btn">Отправить</button>
+    </div>
+</div>
 
+<footer>
+    <div class="footer-content">
+      <div class="footer-left">
+        <p>&copy; SkiiBridge 2025</p>
+      </div>
+  
+      <div class="footer-center">
+        <div class="footer-section">
+          <h3>О нас</h3>
+          <a href="#" class="footer-button">Наша миссия</a>
+          <a href="#" class="footer-button">Команда</a>
+        </div>
+  
+        <div class="footer-section">
+          <h3>Работодателям</h3>
+          <a href="#" class="footer-button">Разместить вакансию</a>
+          <a href="#" class="footer-button">Найти сотрудников</a>
+        </div>
+  
+        <div class="footer-section">
+          <h3>Стажерам</h3>
+          
+          <a href="#" class="footer-button">Полезные статьи</a>
+        </div>
+      </div>
+  
+      <div class="footer-right">
+        <!-- Здесь может быть дополнительный контент справа -->
+      </div>
+    </div>
+  </footer>
 
 <script>
     function selectSkill(element, targetId) {
@@ -183,6 +242,29 @@
         let selected = document.querySelectorAll('.selected-skills .skill');
         let skillText = Array.from(selected).map(skill => skill.textContent).join(', ');
         document.getElementById('selected-skills').value = skillText;
+    }
+</script>
+
+<script>
+    function saveSkills() {
+        const hardSkills = Array.from(document.querySelectorAll('#selected-hard-skills .skill')).map(skill => skill.textContent).join(', ');
+        const softSkills = Array.from(document.querySelectorAll('#selected-soft-skills .skill')).map(skill => skill.textContent).join(', ');
+
+        fetch("{{ url_for('save_skills') }}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: `hard_skills=${encodeURIComponent(hardSkills)}&soft_skills=${encodeURIComponent(softSkills)}`,
+        })
+        .then(response => {
+            if (response.redirected) {
+                window.location.href = response.url;  // Перенаправление после успешного сохранения
+            }
+        })
+        .catch(error => {
+            console.error("Ошибка при сохранении навыков:", error);
+        });
     }
 </script>
 
@@ -253,6 +335,63 @@
     
         // Вызываем функцию при загрузке страницы
         document.addEventListener('DOMContentLoaded', hideFlashMessages);
+        </script>
+        <script>
+            // Функция для открытия модального окна поддержки
+            function openSupportModal() {
+                const supportModal = document.getElementById('support-modal');
+                supportModal.style.display = 'flex';
+                setTimeout(() => supportModal.classList.add('show'), 10);
+            }
+        
+            // Функция для закрытия модального окна поддержки
+            function closeSupportModal() {
+                const supportModal = document.getElementById('support-modal');
+                supportModal.classList.remove('show');
+                setTimeout(() => supportModal.style.display = 'none', 300);
+            }
+        
+            // Закрытие модального окна при клике на крестик
+            document.querySelector('.close-support-btn').addEventListener('click', closeSupportModal);
+        
+            // Закрытие модального окна при клике вне его области
+            window.addEventListener('click', (event) => {
+                const supportModal = document.getElementById('support-modal');
+                if (event.target === supportModal) {
+                    closeSupportModal();
+                }
+            });
+        
+            // Обработчик отправки формы
+            document.getElementById('send-support-btn').addEventListener('click', function (event) {
+                event.preventDefault(); // Предотвращаем отправку формы
+                const textarea = document.getElementById('support-textarea');
+                const message = textarea.value.trim();
+        
+                if (message) {
+                    alert('Ваш вопрос отправлен! Мы свяжемся с вами в ближайшее время.');
+                    textarea.value = ''; // Очищаем текстовое поле
+                    closeSupportModal(); // Закрываем модальное окно
+                } else {
+                    alert('Пожалуйста, введите ваш вопрос.');
+                }
+            });
+        </script>
+    
+        <script>
+            function logout() {
+                fetch("{{ url_for('logout') }}", {
+                    method: "GET",
+                })
+                .then(response => {
+                    if (response.redirected) {
+                        window.location.href = response.url;  // Перенаправление после выхода
+                    }
+                })
+                .catch(error => {
+                    console.error("Ошибка при выходе:", error);
+                });
+            }
         </script>
 
     </body>

@@ -23,10 +23,9 @@
     {% endwith %}
 
     <div class="header">
-        <div class="logo"><a href="{{ url_for('first_page') }}">SkillBridge</a></div>
+        <div class="logo">SkillBridge</div>
         <div class="header-buttons">
-            <button onclick="alert('Помощь скоро будет доступна')">Помощь</button>
-            <!--<button id="login-btn">Вход</button>-->
+            <button onclick="openSupportModal()">Помощь</button>
         </div>
     </div>
 
@@ -63,11 +62,51 @@
                 <input type="text" name="last_name" placeholder="Фамилия" required>
                 <input type="email" name="email" placeholder="Email" required>
                 <input type="password" name="password" placeholder="Пароль" required>
-                <input type="text" name="languages" placeholder="Языки программирования (через запятую)" required>
                 <button type="submit">Зарегистрироваться</button>
             </form>
         </div>
     </div>
+
+    <div id="support-modal" class="support-modal">
+        <div class="support-modal-content">
+            <span class="close-support-btn">&times;</span>
+            <h2>Опишите вашу проблему</h2>
+            <textarea id="support-textarea" placeholder="Введите ваш вопрос..."></textarea>
+            <button id="send-support-btn">Отправить</button>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="footer-content">
+          <div class="footer-left">
+            <p>&copy; SkiiBridge 2025</p>
+          </div>
+      
+          <div class="footer-center">
+            <div class="footer-section">
+              <h3>О нас</h3>
+              <a href="#" class="footer-button">Наша миссия</a>
+              <a href="#" class="footer-button">Команда</a>
+            </div>
+      
+            <div class="footer-section">
+              <h3>Работодателям</h3>
+              <a href="#" class="footer-button">Разместить вакансию</a>
+              <a href="#" class="footer-button">Найти сотрудников</a>
+            </div>
+      
+            <div class="footer-section">
+              <h3>Стажерам</h3>
+              
+              <a href="#" class="footer-button">Полезные статьи</a>
+            </div>
+          </div>
+      
+          <div class="footer-right">
+            <!-- Здесь может быть дополнительный контент справа -->
+          </div>
+        </div>
+      </footer>
 
     <script>
         function openPanel(type) {
@@ -136,15 +175,47 @@
         // Вызываем функцию при загрузке страницы
         document.addEventListener('DOMContentLoaded', hideFlashMessages);
     </script>
-
-<div id="support-modal" class="support-modal">
-    <div class="support-modal-content">
-        <span class="close-support-btn">&times;</span>
-        <h2>Опишите вашу проблему</h2>
-        <textarea id="support-textarea" placeholder="Введите ваш вопрос..."></textarea>
-        <button id="send-support-btn">Отправить</button>
-    </div>
-</div>
+    <script>
+        // Функция для открытия модального окна поддержки
+        function openSupportModal() {
+            const supportModal = document.getElementById('support-modal');
+            supportModal.style.display = 'flex';
+            setTimeout(() => supportModal.classList.add('show'), 10);
+        }
+    
+        // Функция для закрытия модального окна поддержки
+        function closeSupportModal() {
+            const supportModal = document.getElementById('support-modal');
+            supportModal.classList.remove('show');
+            setTimeout(() => supportModal.style.display = 'none', 300);
+        }
+    
+        // Закрытие модального окна при клике на крестик
+        document.querySelector('.close-support-btn').addEventListener('click', closeSupportModal);
+    
+        // Закрытие модального окна при клике вне его области
+        window.addEventListener('click', (event) => {
+            const supportModal = document.getElementById('support-modal');
+            if (event.target === supportModal) {
+                closeSupportModal();
+            }
+        });
+    
+        // Обработчик отправки формы
+        document.getElementById('send-support-btn').addEventListener('click', function (event) {
+            event.preventDefault(); // Предотвращаем отправку формы
+            const textarea = document.getElementById('support-textarea');
+            const message = textarea.value.trim();
+    
+            if (message) {
+                alert('Ваш вопрос отправлен! Мы свяжемся с вами в ближайшее время.');
+                textarea.value = ''; // Очищаем текстовое поле
+                closeSupportModal(); // Закрываем модальное окно
+            } else {
+                alert('Пожалуйста, введите ваш вопрос.');
+            }
+        });
+    </script>
 
 </body>
 </html>

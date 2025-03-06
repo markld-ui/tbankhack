@@ -69,6 +69,9 @@
                 <div id="selected-hard-skills" class="selected-skills"></div>
                 <div id="selected-soft-skills" class="selected-skills"></div>
             </div>
+            <div class="save">
+                <button class="save-button" onclick="saveSkills()">Сохранить</button>
+            </div>
         </div>
 
 
@@ -113,7 +116,9 @@
                     <span class="company-name">Ипатов В. С.</span>
                     <span class="internship-date">25.02.2025</span>
                     <div class="buttons">
-                        <button class="additionaly">Подробнее</button>
+                        <button class="additionaly" data-name="Ипатов В. С." data-experience="3 года" data-skills="JavaScript, React, PHP" data-education="Высшее, МГУ">
+                            Подробнее
+                        </button>
                         
                     </div>
                 </li>
@@ -121,7 +126,9 @@
                     <span class="company-name">Калугин А. Д."</span>
                     <span class="internship-date">01.03.2025</span>
                     <div class="buttons">
-                        <button class="additionaly">Подробнее</button>
+                        <button class="additionaly" data-name="Калугин А. Д." data-experience="2 года" data-skills="Python, Django" data-education="Бакалавр, СПбГУ">
+                            Подробнее
+                        </button>
                         
                     </div>
                 </li>
@@ -172,6 +179,10 @@
         let skillText = Array.from(selected).map(skill => skill.textContent).join(', ');
         document.getElementById('selected-skills').value = skillText;
     }
+
+    function saveSkills() {
+    alert('Компетенции сохранены!');
+    }
 </script>
 
 <script>
@@ -196,8 +207,130 @@
       }
     });
   </script>
+    
+    <div id="resumeModal" class="modal1">
+        <div class="modal-content">
+            <span id="closeModal" class="close" onclick="closeModal()">&times;</span>
+            <h2>Резюме</h2>
+            <p id="resumeText">Здесь будет информация о кандидате...</p>
+        </div>
+    </div>
 
 
+    <script >
+        function openModal(candidateName, candidateDetails) {
+    document.getElementById("resumeText").innerText = candidateDetails;
+    document.getElementById("resumeModal").style.display = "flex";
+}
+
+document.querySelectorAll(".additionaly").forEach(button => {
+    button.addEventListener("click", function () {
+        const candidateName = this.closest(".internship-item").querySelector(".company-name").innerText;
+        const candidateDetails = `Резюме кандидата: ${candidateName}\nОпыт работы: 3 года. Навыки: JavaScript, React, Node.js.`;
+        openModal(candidateName, candidateDetails);
+    });
+});
+function openModal() {
+    const modal = document.getElementById("resumeModal");
+    modal.classList.add('show');
+}
+
+function closeModal() {
+    const modal = document.getElementById("resumeModal");
+    modal.classList.remove('show');
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    // Функция открытия модального окна
+    function openModal(candidateName, candidateDetails) {
+        const modal = document.getElementById("resumeModal");
+        const resumeTextElement = document.getElementById("resumeText");
+
+        // Вставляем данные кандидата в модальное окно
+        resumeTextElement.innerHTML = `Резюме кандидата: <strong>${candidateName}</strong><br><br>${candidateDetails}`;
+
+        // Показываем модальное окно
+        modal.style.display = "flex";
+    }
+
+    // Функция закрытия модального окна
+    function closeModal() {
+        document.getElementById("resumeModal").style.display = "none";
+    }
+
+    // Закрытие модального окна при клике на крестик
+    document.getElementById("closeModal").addEventListener("click", closeModal);
+
+    // Закрытие модального окна при клике вне модального контента
+    window.addEventListener("click", function (event) {
+        if (event.target === document.getElementById("resumeModal")) {
+            closeModal();
+        }
+    });
+
+    // Обработчик клика на кнопки "Подробнее"
+    document.querySelectorAll(".additionaly").forEach(button => {
+        button.addEventListener("click", function () {
+            // Получаем данные кандидата
+            const candidateName = this.closest(".internship-item").querySelector(".company-name").innerText;
+            const candidateDetails = `Опыт работы: 3 года.<br>Навыки: JavaScript, React, Node.js.<br>Образование: Высшее, МГУ.`; // Здесь можно добавить реальные данные
+
+            // Открываем модальное окно с информацией
+            openModal(candidateName, candidateDetails);
+        });
+    });
+});
+    </script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const modal = document.getElementById("resumeModal"); // Получаем модальное окно
+        const closeModalButton = document.getElementById("closeModal"); // Кнопка закрытия
+        const resumeTextElement = document.getElementById("resumeText"); // Блок с резюме
+
+        // Функция открытия модального окна
+        function openModal(candidateName, experience, skills, education) {
+            // Вставляем данные о кандидате в модальное окно
+            resumeTextElement.innerHTML = `
+                <strong>Имя кандидата:</strong> ${candidateName}<br>
+                <strong>Опыт работы:</strong> ${experience}<br>
+                <strong>Навыки:</strong> ${skills}<br>
+                <strong>Образование:</strong> ${education}
+            `;
+            modal.style.display = "flex"; // Показываем окно
+        }
+
+        // Функция закрытия модального окна
+        function closeModal() {
+            modal.style.display = "none"; // Скрываем окно
+        }
+
+        // Закрытие по клику на крестик
+        closeModalButton.addEventListener("click", closeModal);
+
+        // Закрытие по клику вне окна
+        window.addEventListener("click", function (event) {
+            if (event.target === modal) {
+                closeModal();
+            }
+        });
+
+        // Обработчики клика на кнопки "Подробнее"
+        document.querySelectorAll(".additionaly").forEach(button => {
+            button.addEventListener("click", function () {
+                // Извлекаем данные о кандидате из атрибутов data-*
+                const candidateName = this.getAttribute("data-name");
+                const experience = this.getAttribute("data-experience");
+                const skills = this.getAttribute("data-skills");
+                const education = this.getAttribute("data-education");
+
+                // Открываем модальное окно с переданными данными
+                openModal(candidateName, experience, skills, education);
+            });
+        });
+    });
+</script>
+
+<script src="functions.js"></script>
 
     </body>
 </html>

@@ -1,72 +1,3 @@
-// Функция для открытия панели регистрации
-function openEmployerPanel() {
-    closeTraineePanel();
-    document.getElementById("employer-panel").classList.add("show");
-}
-
-// Функция для закрытия панели регистрации
-function closeEmployerPanel() {
-    document.getElementById("employer-panel").classList.remove("show");
-}
-
-function openTraineePanel() {
-    closeEmployerPanel();
-    document.getElementById("trainee-panel").classList.add("show");
-}
-
-// Функция для закрытия панели регистрации
-function closeTraineePanel() {
-    document.getElementById("trainee-panel").classList.remove("show");
-}
-
-// Привязываем кнопки к функции открытия панели
-document.getElementById("employer-btn").onclick = openEmployerPanel;
-document.getElementById("trainee-btn").onclick = openTraineePanel;
-
-document.addEventListener("DOMContentLoaded", function () {
-    // Получаем элементы
-    const loginModal = document.getElementById("loginModal");
-    const loginBtn = document.getElementById("login-btn");
-    const closeBtn = document.getElementById("close-login");
-
-    // Функция для открытия окна входа
-    function openLoginPanel() {
-        loginModal.classList.add("show");
-    }
-
-    // Функция для закрытия окна входа
-    function closeLoginPanel() {
-        loginModal.classList.remove("show");
-    }
-
-    // Привязываем кнопки к функциям
-    if (loginBtn) loginBtn.addEventListener("click", function() {
-        openLoginPanel();
-    });
-    
-    if (closeBtn) closeBtn.addEventListener("click", closeLoginPanel);
-
-    // Функция входа
-    document.getElementById("login-form").addEventListener("submit", function(event) {
-        event.preventDefault();
-        localStorage.setItem("loggedIn", "true");
-        updateLoginButton();
-        closeLoginPanel();
-    });
-
-    // Функция обновления кнопки входа
-    function updateLoginButton() {
-        if (localStorage.getItem("loggedIn") === "true") {
-            loginBtn.textContent = "Выйти"; // Кнопка "Выйти" при успешном входе
-        } else {
-            loginBtn.textContent = "Вход"; // Кнопка "Вход", если пользователь не вошел
-        }
-    }
-
-    // Проверяем состояние при загрузке страницы
-    updateLoginButton();
-});
-
 document.addEventListener("DOMContentLoaded", function() {
     const container = document.querySelector(".container__information2");
     const starRating = document.querySelector(".star-rating");
@@ -158,4 +89,102 @@ function logout() {
     // Перенаправляем на главную страницу
     window.location.href = "index.html";
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+    const registerModal = document.getElementById("register-modal");
+    const closeRegisterBtn = document.getElementById("close-register");
+    const employerBtn = document.getElementById("employer-btn");
+    const traineeBtn = document.getElementById("trainee-btn");
+    const employerPanel = document.getElementById("employer-panel");
+    const traineePanel = document.getElementById("trainee-panel");
+
+    // Функция для открытия панели работодателя
+    function openEmployerPanel() {
+        closeTraineePanel();
+        employerPanel.classList.add("show");
+    }
+
+    // Функция для закрытия панели работодателя
+    function closeEmployerPanel() {
+        employerPanel.classList.remove("show");
+    }
+
+    // Функция для открытия панели стажёра
+    function openTraineePanel() {
+        closeEmployerPanel();
+        traineePanel.classList.add("show");
+    }
+
+    // Функция для закрытия панели стажёра
+    function closeTraineePanel() {
+        traineePanel.classList.remove("show");
+    }
+
+    // Функция для закрытия модального окна регистрации
+    function closeRegisterModal() {
+        registerModal.style.display = "none";
+    }
+
+    // Привязываем кнопки к функциям открытия
+    if (employerBtn) employerBtn.onclick = openEmployerPanel;
+    if (traineeBtn) traineeBtn.onclick = openTraineePanel;
+
+    // Закрываем модальное окно при клике на крестик
+    if (closeRegisterBtn) {
+        closeRegisterBtn.addEventListener("click", closeRegisterModal);
+    }
+
+    // Закрываем модальное окно при клике вне его области
+    window.addEventListener("click", function (event) {
+        if (event.target === registerModal) {
+            closeRegisterModal();
+        }
+    });
+});
+
+
+
+
+
+
+
+
+
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const modal = document.getElementById("resumeModal"); // Получаем модальное окно
+    const closeModalButton = document.getElementById("closeModal"); // Кнопка закрытия
+    const resumeTextElement = document.getElementById("resumeText"); // Блок с резюме
+
+    // Функция открытия модального окна
+    function openModal(resumeModal) {
+        resumeTextElement.innerText = resumeModal; // Устанавливаем текст резюме
+        modal.style.display = "flex"; // Показываем окно
+    }
+
+    // Функция закрытия модального окна
+    function closeModal() {
+        modal.style.display = "none"; // Скрываем окно
+    }
+
+    // Закрытие по клику на крестик
+    closeModalButton.addEventListener("click", closeModal);
+
+    // Закрытие по клику вне окна
+    window.addEventListener("click", function (event) {
+        if (event.target === modal) {
+            closeModal();
+        }
+    });
+
+    // Обработчики клика на кнопки "Подробнее"
+    document.querySelectorAll(".additionaly").forEach(button => { // Примечание: класс должен быть ".additional"
+        button.addEventListener("click", function () {
+            const candidateName = this.closest(".internship-item").querySelector(".company-name").innerText; // Получаем имя
+            const resumeText = `Резюме кандидата: ${candidateName}\n\nОпыт работы: 3 года.\nНавыки: JavaScript, React, Node.js.\nОбразование: Высшее, МГУ.`; // Данные
+            openModal(resumeText); // Открываем окно
+        });
+    });
+});
 

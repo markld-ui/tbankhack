@@ -24,10 +24,14 @@
     {% endwith %}
 
     <div class="header">
-        <div class="logo"><a href="{{ url_for('first_page') }}">SkillBridge</a></div>
+        <div class="logo">SkillBridge</div>
         <div class="header-buttons">
-            <button onclick="alert('Помощь скоро будет доступна')">Помощь</button>
-            <button onclick="logout()">Выйти</button>
+            <button onclick="openSupportModal()">Помощь</button>
+            {% if 'email' in session %}
+                <button onclick="logout()">Выйти</button>
+            {% else %}
+                <button id="login-btn">Вход</button>
+            {% endif %}
         </div>
     </div>
 
@@ -42,8 +46,8 @@
             <p><strong>Название компании:</strong> <span id="user-name">{{ company[1] }}</span> </p>
             <p><strong>Имя:</strong> <span id="user-name">{{ company[1] }}</span> </p>
             <p><strong>Email:</strong> <span id="user-email">{{ company[2] }}</span> </p>
-            <p><strong>Языки программирования:</strong> <span id="company">{{ company[4] }}</span> </p>
-            <p><strong>Описание:</strong> <span id="description">{{ company[5] }}</span> </p>
+            <p><strong>Необходимые Софт-скиллы:</strong> <span id="company">{{ company[5] }}</span> </p>
+            <p><strong>Необходимые Хард-скиллы:</strong> <span id="description">{{ company[4] }}</span> </p>
             <p><strong>Локация:</strong> <span id="user-email">Томск</span> </p>
         </div>
 
@@ -61,6 +65,15 @@
                     <span class="skill" onclick="selectSkill(this, 'selected-hard-skills')">Python</span>
                     <span class="skill" onclick="selectSkill(this, 'selected-hard-skills')">JavaScript</span>
                     <span class="skill" onclick="selectSkill(this, 'selected-hard-skills')">PHP</span>
+                    <span class="skill" onclick="selectSkill(this, 'selected-hard-skills')">SQL</span>
+                    <span class="skill" onclick="selectSkill(this, 'selected-hard-skills')">Node.js</span>
+                    <span class="skill" onclick="selectSkill(this, 'selected-hard-skills')">Docker</span>
+                    <span class="skill" onclick="selectSkill(this, 'selected-hard-skills')">Kubernetes</span>
+                    <span class="skill" onclick="selectSkill(this, 'selected-hard-skills')">GraphQL</span>
+                    <span class="skill" onclick="selectSkill(this, 'selected-hard-skills')">Swift</span>
+                    <span class="skill" onclick="selectSkill(this, 'selected-hard-skills')">Go</span>
+                    <span class="skill" onclick="selectSkill(this, 'selected-hard-skills')">CI/CD</span>
+                    <span class="skill" onclick="selectSkill(this, 'selected-hard-skills')">REST API</span>
                 </div>
             </div>
             
@@ -70,11 +83,15 @@
                     <span class="skill" onclick="selectSkill(this, 'selected-soft-skills')">Лидерские качества</span>
                     <span class="skill" onclick="selectSkill(this, 'selected-soft-skills')">Инициативность</span>
                     <span class="skill" onclick="selectSkill(this, 'selected-soft-skills')">Тайм-менеджмент</span>
-                    <span class="skill" onclick="selectSkill(this, 'selected-soft-skills')">Инициативность</span>
                     <span class="skill" onclick="selectSkill(this, 'selected-soft-skills')">Работа в команде</span>
                     <span class="skill" onclick="selectSkill(this, 'selected-soft-skills')">Коммуникабельность</span>
                     <span class="skill" onclick="selectSkill(this, 'selected-soft-skills')">Креативность</span>
                     <span class="skill" onclick="selectSkill(this, 'selected-soft-skills')">Дисциплинированность</span>
+                    <span class="skill" onclick="selectSkill(this, 'selected-soft-skills')">Критическое мышление</span>
+                    <span class="skill" onclick="selectSkill(this, 'selected-soft-skills')">Управление конфликтами</span>
+                    <span class="skill" onclick="selectSkill(this, 'selected-soft-skills')">Адаптивность</span>
+                    <span class="skill" onclick="selectSkill(this, 'selected-soft-skills')">Обучаемость</span>
+                    <span class="skill" onclick="selectSkill(this, 'selected-soft-skills')">Переговорные навыки</span>
                 </div>
             </div>
             
@@ -84,6 +101,9 @@
             <div class="selected-skills-list">
                 <div id="selected-hard-skills" class="selected-skills"></div>
                 <div id="selected-soft-skills" class="selected-skills"></div>
+            </div>
+            <div class="save">
+                <button class="save-button" onclick="saveSkills()">Сохранить</button>
             </div>
         </div>
 
@@ -112,7 +132,7 @@
         <span class="field__title">Напишите о своей компании и кого вы хотите видеть в ней:</span>
         <textarea class="field__textarea" name="О себе"></textarea>
       </label>
-      <button class="updateDescriptionButton" id="updateDescriptionButton">Обновить описание</button>
+      <button class="updateDescriptionButton" id="updateDescriptionButton" disabled>Обновить описание</button>
 </div>
     
 </div>
@@ -130,7 +150,6 @@
                     <span class="internship-date">25.02.2025</span>
                     <div class="buttons">
                         <button class="additionaly">Подробнее</button>
-                        
                     </div>
                 </li>
                 <li class="internship-item">
@@ -138,7 +157,6 @@
                     <span class="internship-date">01.03.2025</span>
                     <div class="buttons">
                         <button class="additionaly">Подробнее</button>
-                        
                     </div>
                 </li>
             </ul>
@@ -172,6 +190,56 @@
     <button class="invite__button">Пригласить на стажировку</button>
 </div>
 
+<div id="resumeModal" class="modal1">
+    <div class="modal-content">
+        <span id="closeModal" class="close" onclick="closeModal()">&times;</span>
+        <h2>Резюме</h2>
+        <p id="resumeText">Здесь будет информация о кандидате...</p>
+    </div>
+</div>
+
+<!-- Модальное окно поддержки -->
+<div id="support-modal" class="support-modal">
+    <div class="support-modal-content">
+        <span class="close-support-btn">&times;</span>
+        <h2>Опишите вашу проблему</h2>
+        <textarea id="support-textarea" placeholder="Введите ваш вопрос..."></textarea>
+        <button id="send-support-btn">Отправить</button>
+    </div>
+</div>
+
+<footer>
+    <div class="footer-content">
+      <div class="footer-left">
+        <p>&copy; SkiiBridge 2025</p>
+      </div>
+  
+      <div class="footer-center">
+        <div class="footer-section">
+          <h3>О нас</h3>
+          <a href="#" class="footer-button">Наша миссия</a>
+          <a href="#" class="footer-button">Команда</a>
+        </div>
+  
+        <div class="footer-section">
+          <h3>Работодателям</h3>
+          <a href="#" class="footer-button">Разместить вакансию</a>
+          <a href="#" class="footer-button">Найти сотрудников</a>
+        </div>
+  
+        <div class="footer-section">
+          <h3>Стажерам</h3>
+          
+          <a href="#" class="footer-button">Полезные статьи</a>
+        </div>
+      </div>
+  
+      <div class="footer-right">
+        <!-- Здесь может быть дополнительный контент справа -->
+      </div>
+    </div>
+  </footer>
+
 <script>
     function selectSkill(element, targetId) {
         let target = document.getElementById(targetId);
@@ -187,6 +255,29 @@
         let selected = document.querySelectorAll('.selected-skills .skill');
         let skillText = Array.from(selected).map(skill => skill.textContent).join(', ');
         document.getElementById('selected-skills').value = skillText;
+    }
+</script>
+
+<script>
+    function saveSkills() {
+        const hardSkills = Array.from(document.querySelectorAll('#selected-hard-skills .skill')).map(skill => skill.textContent).join(', ');
+        const softSkills = Array.from(document.querySelectorAll('#selected-soft-skills .skill')).map(skill => skill.textContent).join(', ');
+
+        fetch("{{ url_for('save_skills') }}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: `hard_skills=${encodeURIComponent(hardSkills)}&soft_skills=${encodeURIComponent(softSkills)}`,
+        })
+        .then(response => {
+            if (response.redirected) {
+                window.location.href = response.url;  // Перенаправление после успешного сохранения
+            }
+        })
+        .catch(error => {
+            console.error("Ошибка при сохранении навыков:", error);
+        });
     }
 </script>
 
@@ -232,6 +323,175 @@
 
     // Вызываем функцию при загрузке страницы
     document.addEventListener('DOMContentLoaded', hideFlashMessages);
+    </script>
+    <script >
+        function openModal(candidateName, candidateDetails) {
+    document.getElementById("resumeText").innerText = candidateDetails;
+    document.getElementById("resumeModal").style.display = "flex";
+}
+
+document.querySelectorAll(".additionaly").forEach(button => {
+    button.addEventListener("click", function () {
+        const candidateName = this.closest(".internship-item").querySelector(".company-name").innerText;
+        const candidateDetails = `Резюме кандидата: ${candidateName}\nОпыт работы: 3 года. Навыки: JavaScript, React, Node.js.`;
+        openModal(candidateName, candidateDetails);
+    });
+});
+function openModal() {
+    const modal = document.getElementById("resumeModal");
+    modal.classList.add('show');
+}
+
+function closeModal() {
+    const modal = document.getElementById("resumeModal");
+    modal.classList.remove('show');
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    // Функция открытия модального окна
+    function openModal(candidateName, candidateDetails) {
+        const modal = document.getElementById("resumeModal");
+        const resumeTextElement = document.getElementById("resumeText");
+
+        // Вставляем данные кандидата в модальное окно
+        resumeTextElement.innerHTML = `Резюме кандидата: <strong>${candidateName}</strong><br><br>${candidateDetails}`;
+
+        // Показываем модальное окно
+        modal.style.display = "flex";
+    }
+
+    // Функция закрытия модального окна
+    function closeModal() {
+        document.getElementById("resumeModal").style.display = "none";
+    }
+
+    // Закрытие модального окна при клике на крестик
+    document.getElementById("closeModal").addEventListener("click", closeModal);
+
+    // Закрытие модального окна при клике вне модального контента
+    window.addEventListener("click", function (event) {
+        if (event.target === document.getElementById("resumeModal")) {
+            closeModal();
+        }
+    });
+
+    // Обработчик клика на кнопки "Подробнее"
+    document.querySelectorAll(".additionaly").forEach(button => {
+        button.addEventListener("click", function () {
+            // Получаем данные кандидата
+            const candidateName = this.closest(".internship-item").querySelector(".company-name").innerText;
+            const candidateDetails = `Опыт работы: 3 года.<br>Навыки: JavaScript, React, Node.js.<br>Образование: Высшее, МГУ.`; // Здесь можно добавить реальные данные
+
+            // Открываем модальное окно с информацией
+            openModal(candidateName, candidateDetails);
+        });
+    });
+});
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const modal = document.getElementById("resumeModal"); // Получаем модальное окно
+            const closeModalButton = document.getElementById("closeModal"); // Кнопка закрытия
+            const resumeTextElement = document.getElementById("resumeText"); // Блок с резюме
+    
+            // Функция открытия модального окна
+            function openModal(candidateName, experience, skills, education) {
+                // Вставляем данные о кандидате в модальное окно
+                resumeTextElement.innerHTML = `
+                    <strong>Имя кандидата:</strong> ${candidateName}<br>
+                    <strong>Опыт работы:</strong> ${experience}<br>
+                    <strong>Навыки:</strong> ${skills}<br>
+                    <strong>Образование:</strong> ${education}
+                `;
+                modal.style.display = "flex"; // Показываем окно
+            }
+    
+            // Функция закрытия модального окна
+            function closeModal() {
+                modal.style.display = "none"; // Скрываем окно
+            }
+    
+            // Закрытие по клику на крестик
+            closeModalButton.addEventListener("click", closeModal);
+    
+            // Закрытие по клику вне окна
+            window.addEventListener("click", function (event) {
+                if (event.target === modal) {
+                    closeModal();
+                }
+            });
+    
+            // Обработчики клика на кнопки "Подробнее"
+            document.querySelectorAll(".additionaly").forEach(button => {
+                button.addEventListener("click", function () {
+                    // Извлекаем данные о кандидате из атрибутов data-*
+                    const candidateName = this.getAttribute("data-name");
+                    const experience = this.getAttribute("data-experience");
+                    const skills = this.getAttribute("data-skills");
+                    const education = this.getAttribute("data-education");
+    
+                    // Открываем модальное окно с переданными данными
+                    openModal(candidateName, experience, skills, education);
+                });
+            });
+        });
+    </script>
+    <script>
+        // Функция для открытия модального окна поддержки
+        function openSupportModal() {
+            const supportModal = document.getElementById('support-modal');
+            supportModal.style.display = 'flex';
+            setTimeout(() => supportModal.classList.add('show'), 10);
+        }
+    
+        // Функция для закрытия модального окна поддержки
+        function closeSupportModal() {
+            const supportModal = document.getElementById('support-modal');
+            supportModal.classList.remove('show');
+            setTimeout(() => supportModal.style.display = 'none', 300);
+        }
+    
+        // Закрытие модального окна при клике на крестик
+        document.querySelector('.close-support-btn').addEventListener('click', closeSupportModal);
+    
+        // Закрытие модального окна при клике вне его области
+        window.addEventListener('click', (event) => {
+            const supportModal = document.getElementById('support-modal');
+            if (event.target === supportModal) {
+                closeSupportModal();
+            }
+        });
+    
+        // Обработчик отправки формы
+        document.getElementById('send-support-btn').addEventListener('click', function (event) {
+            event.preventDefault(); // Предотвращаем отправку формы
+            const textarea = document.getElementById('support-textarea');
+            const message = textarea.value.trim();
+    
+            if (message) {
+                alert('Ваш вопрос отправлен! Мы свяжемся с вами в ближайшее время.');
+                textarea.value = ''; // Очищаем текстовое поле
+                closeSupportModal(); // Закрываем модальное окно
+            } else {
+                alert('Пожалуйста, введите ваш вопрос.');
+            }
+        });
+    </script>
+
+    <script>
+        function logout() {
+            fetch("{{ url_for('logout') }}", {
+                method: "GET",
+            })
+            .then(response => {
+                if (response.redirected) {
+                    window.location.href = response.url;  // Перенаправление после выхода
+                }
+            })
+            .catch(error => {
+                console.error("Ошибка при выходе:", error);
+            });
+        }
     </script>
 
     </body>

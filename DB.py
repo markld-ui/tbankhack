@@ -17,15 +17,17 @@ def create_database():
 
     # Создаем таблицу users
     cursor.execute('''
-        CREATE TABLE IF NOT EXISTS users (
+    CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             first_name TEXT NOT NULL,
             last_name TEXT NOT NULL,
             email TEXT NOT NULL UNIQUE,
             password TEXT NOT NULL,
             project TEXT NOT NULL,
-            languages TEXT,
+            hard_skills TEXT,
+            soft_skills TEXT,
             description TEXT,
+            location TEXT,
             id_request INTEGER,
             id_rating INTEGER,
             FOREIGN KEY (id_rating) REFERENCES rating(id)
@@ -39,9 +41,13 @@ def create_database():
             comp_name TEXT NOT NULL,
             email TEXT NOT NULL UNIQUE,
             password TEXT NOT NULL,
-            languages TEXT,
+            hard_skills TEXT,
+            soft_skills TEXT,
             description TEXT,
-            min_rating INTEGER NOT NULL,
+            location TEXT,
+            hardskill_score INTEGER,  -- Баллы за hardskill
+            softskill_score INTEGER,  -- Баллы за softskill
+            location_score INTEGER,   -- Баллы за location
             rating DOUBLE,
             id_request INTEGER,
             FOREIGN KEY (id_request) REFERENCES request(id)
@@ -67,7 +73,9 @@ def create_database():
         email="user@gmail.com",
         password=bcrypt.hashpw("Qwerty355".encode('utf-8'), bcrypt.gensalt()),
         project="Python-backend разработка",
-        languages="Python, C#, C++, Java",
+        hard_skills="Python, C#, C++, Java",
+        soft_skills="Коммуникабельность, Тайм-менеджмент",
+        location="Екатеринбург",
         description="Python-backend разработчик, учусь в IT-Academy",
         id_rating=1,
         id_request=1
@@ -79,9 +87,13 @@ def create_database():
         comp_name='АО "Т-Банк"',
         email="company@gmail.com",
         password=bcrypt.hashpw("Qwerty355".encode('utf-8'), bcrypt.gensalt()),
-        languages="Python, C#, C++, Java, Scala, JavaScript",
+        hard_skills="Python, C#, C++, Java",
+        soft_skills="Коммуникабельность, Обучаемость",
         description="Российский коммерческий банк, сфокусированный полностью на дистанционном обслуживании, не имеющий розничных отделений.",
-        min_rating=4,
+        location="Москва",
+        hardskill_score=3,
+        softskill_score=2,
+        location_score=1,
         rating=4.5,
         id_request=1
     )
@@ -117,41 +129,48 @@ def calculate_compatibility(user_id):
     cursor = conn.cursor()
 
     # Получаем данные пользователя
-    cursor.execute('SELECT languages, description FROM users WHERE id = ?', (user_id,))
+    cursor.execute('SELECT hard_skills, soft_skills, location FROM users WHERE id = ?', (user_id,))
     user = cursor.fetchone()
 
     if not user:
         print(f"Пользователь с id {user_id} не найден.")
         return
 
-    user_languages = set(user[0].split(', ')) if user[0] else set()
-    user_description = set(user[1].split(', ')) if user[1] else set()
+    # Разделяем навыки пользователя на множества
+    user_hardskills = set(user[0].split(', '))
+    user_softskills = set(user[1].split(', '))
+    user_location = user[2]
 
     # Получаем данные всех компаний
-    cursor.execute('SELECT id, languages, description, comp_name FROM comp')
+    cursor.execute('SELECT id, hard_skills, soft_skills, location, hardskill_score, softskill_score, location_score, comp_name FROM comp')
     companies = cursor.fetchall()
 
     results = []
 
     for company in companies:
-        comp_id, comp_languages, comp_description, comp_name = company
-        comp_languages = set(comp_languages.split(', ')) if comp_languages else set()
-        comp_description = set(comp_description.split(', ')) if comp_description else set()
+        comp_id, comp_hardskills, comp_softskills, comp_location, hardskill_score, softskill_score, location_score, comp_name = company
+        comp_hardskills = set(comp_hardskills.split(', '))
+        comp_softskills = set(comp_softskills.split(', '))
 
-        score = 0
+        total_score = 0
 
-        # Сравниваем языки
-        score += len(user_languages.intersection(comp_languages))
+        # Сравниваем hard skills
+        common_hardskills = user_hardskills.intersection(comp_hardskills)
+        total_score += len(common_hardskills) * hardskill_score
 
-        # Сравниваем описания
-        score += len(user_description.intersection(comp_description))
+        # Сравниваем soft skills
+        common_softskills = user_softskills.intersection(comp_softskills)
+        total_score += len(common_softskills) * softskill_score
+
+        # Сравниваем location
+        if user_location == comp_location:
+            total_score += location_score
 
         # Максимальное количество баллов
-        max_score = len(user_languages) + len(user_description)
-        if max_score == 0:
-            compatibility_percentage = 0
-        else:
-            compatibility_percentage = (score / max_score) * 100
+        max_score = (len(user_hardskills) * hardskill_score) + (len(user_softskills) * softskill_score) + int(location_score)
+
+        # Процент совместимости
+        compatibility_percentage = (total_score / max_score) * 100
 
         results.append({
             'company_id': comp_id,
@@ -166,14 +185,16 @@ def calculate_compatibility(user_id):
 
 
 class User:
-    def __init__(self, first_name, last_name, email, password, project, languages, description, id_rating, id_request):
+    def __init__(self, first_name, last_name, email, password, project, hard_skills, soft_skills, description, location, id_rating, id_request):
         self.first_name = first_name
         self.last_name = last_name
         self.email = email
         self.password = password
         self.project = project
-        self.languages = languages
+        self.hard_skills = hard_skills
+        self.soft_skills = soft_skills
         self.description = description
+        self.location = location
         self.id_rating = id_rating
         self.id_request = id_request
 
@@ -190,9 +211,9 @@ class User:
 
         try:
             cursor.execute('''
-                INSERT INTO users (first_name, last_name, email, password, project, languages, description, id_rating, id_request)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-            ''', (self.first_name, self.last_name, self.email, self.password, self.project, self.languages, self.description, self.id_rating, self.id_request))
+                INSERT INTO users (first_name, last_name, email, password, project, hard_skills, soft_skills, description, location, id_rating, id_request)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ''', (self.first_name, self.last_name, self.email, self.password, self.project, self.hard_skills, self.soft_skills, self.description, self.location, self.id_rating, self.id_request))
 
             conn.commit()
             print("Пользователь успешно добавлен!")
@@ -205,13 +226,17 @@ class User:
             conn.close()
 
 class Company:
-    def __init__(self, comp_name, email, password, languages, description, min_rating, rating, id_request):
+    def __init__(self, comp_name, email, password, hard_skills, soft_skills, description,  location, hardskill_score, softskill_score, location_score, rating, id_request):
         self.comp_name = comp_name
         self.email = email
         self.password = password
-        self.languages = languages
         self.description = description
-        self.min_rating = min_rating
+        self.hard_skills = hard_skills
+        self.soft_skills = soft_skills
+        self.location = location
+        self.hardskill_score = hardskill_score
+        self.softskill_score = softskill_score
+        self.location_score = location_score
         self.rating = rating
         self.id_request = id_request
 
@@ -227,9 +252,9 @@ class Company:
 
         try:
             cursor.execute('''
-                INSERT INTO comp (comp_name, email, password, languages, description, min_rating, rating, id_request)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-            ''', (self.comp_name, self.email, self.password, self.languages, self.description, self.min_rating, self.rating, self.id_request))
+                INSERT INTO comp (comp_name, email, password, hard_skills, soft_skills, description, location, hardskill_score, softskill_score, location_score, rating, id_request)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ''', (self.comp_name, self.email, self.password, self.hard_skills, self.soft_skills, self.description, self.location, self.hardskill_score, self.softskill_score, self.location_score, self.rating, self.id_request))
 
             conn.commit()
             print("Компания успешно добавлена!")

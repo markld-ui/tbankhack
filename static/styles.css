@@ -19,7 +19,6 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background: url('/src/images/istockphoto-527543742-170667a.jpg') no-repeat center center/cover;
     filter: blur(15px); 
     opacity: 0.3; 
     z-index: -1;
@@ -158,6 +157,7 @@ body::before {
 }
 /* Выдвижная панель */
 .register-panel {
+    display: none;
     position: fixed;
     top: 0;
     right: -400px;
@@ -230,7 +230,7 @@ form button {
 }
 
 form button:hover {
-    background: #333333;
+    background:#333333;
 }
 
 label:hover {
@@ -246,7 +246,7 @@ input[type="checkbox"] {
 
 .information {
     padding: 20px;
-    max-width: 800px;
+    max-width: 1300px;
     margin: 30px auto;
     background: white;
     border-radius: 10px;
@@ -632,15 +632,15 @@ margin-bottom: 10px;
 
 .skill {
 padding: 8px 12px;
-background: #3498db;
-color: white;
+background: #FFD700;
+color: rgb(0, 0, 0);
 border-radius: 20px;
 cursor: pointer;
 display: inline-block;
 }
 
 .skill:hover {
-background: #2980b9;
+background: #8e29b9;
 }
 
 .selected-skills {
@@ -1228,3 +1228,214 @@ img {
 .support-modal button:hover {
     background: #000;
 }
+
+.save-button {
+    background-color: #000000; 
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.save-button:hover {
+    background-color: #8e29b9;
+    transform: scale(1.05);
+}
+
+.save-button:active {
+    background-color: #8e29b9;
+    transform: scale(0.98);
+}
+
+
+/* Основные стили для модального окна */
+.modal1 {
+    display: none; /* Изначально скрыто */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Полупрозрачный затемняющий фон */
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.3s ease-in-out; /* Плавное изменение прозрачности */
+}
+
+.modal.show {
+    display: flex; /* Показываем окно при добавлении класса show */
+}
+
+/* Контейнер для модального окна */
+.modal-content {
+    background: #fff;
+    padding: 40px;
+    border-radius: 12px;
+    width: 80%;
+    max-width: 600px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Тень для глубины */
+    position: relative;
+    animation: fadeIn 0.5s ease; /* Анимация появления */
+    font-family: 'Arial', sans-serif;
+}
+
+/* Анимация появления модального окна */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Стиль для кнопки закрытия */
+.close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 30px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close:hover {
+    color: #ff5c5c; /* Цвет при наведении на крестик */
+}
+
+/* Заголовок модального окна */
+.modal-content h2 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 600;
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 20px;
+    text-transform: uppercase; /* Сделаем заголовок заглавными буквами */
+    letter-spacing: 1px; /* Добавим небольшие интервалы между буквами */
+}
+
+/* Стили для текста в модальном окне */
+#resumeText {
+    font-size: 20px;
+    line-height: 1.7;
+    color: #555;
+    margin-bottom: 20px;
+    text-align: justify; /* Текст выравнивается по ширине */
+    word-wrap: break-word; /* Перенос длинных слов */
+}
+
+/* Добавление отступов между строками в резюме */
+#resumeText strong {
+    font-weight: bold;
+    color: #333;
+}
+
+/* Добавление кнопки закрытия */
+.modal-overlay {
+    background-color: rgba(0, 0, 0, 0.5); /* Фон для затемнения */
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 999; /* Чтобы фон был за модальным окном */
+}
+
+/*FOOTER*/
+footer {
+    background-color: #1a1a1a;
+    color: #f0f0f0;
+    padding: 20px 0;
+    font-size: 0.9em;
+    border-top: 1px solid #333;
+  }
+  
+  .footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex; /* Используем Flexbox для размещения разделов */
+    justify-content: space-between; /* Размещаем разделы по краям */
+    align-items: center; /* Выравниваем по вертикали */
+  }
+  
+  .footer-left {
+    text-align: left; /* Выравниваем логотип и год слева */
+  }
+  
+  .footer-logo {
+    max-width: 150px; /* Ограничиваем размер логотипа */
+    margin-bottom: 10px;
+  }
+  
+  .footer-center {
+    display: flex; /* Используем Flexbox для разделов в центре */
+    justify-content: center; /* Размещаем разделы по центру */
+    text-align: center; /* Выравниваем текст по центру */
+  }
+  
+  .footer-section {
+    margin: 0 20px; /* Отступы между разделами */
+  }
+  
+  .footer-button {
+    background-color: transparent;
+    
+    color: #f0f0f0;
+    padding: 8px 16px;
+    margin: 5px;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.2s ease;
+    display: block; /* Кнопки занимают всю ширину */
+    width: 100%;  /*  Кнопки занимают всю ширину */
+    box-sizing: border-box;
+  }
+  
+  .footer-button:hover {
+    background-color: #333;
+  }
+  
+  .footer-right {
+    text-align: right; /* Выравниваем контент справа */
+  }
+  
+  /* Media Query для мобильных устройств */
+  @media (max-width: 767px) {
+    .footer-content {
+      flex-direction: column; /* Размещаем разделы в колонку */
+      align-items: center; /* Выравниваем по центру */
+      text-align: center;
+    }
+  
+    .footer-center {
+      flex-direction: column; /* Размещаем разделы в колонку */
+      align-items: center;
+    }
+  
+    .footer-section {
+      margin: 20px 0;
+    }
+  
+    .footer-logo {
+      max-width: 100px; /* Уменьшаем логотип на мобильных */
+    }
+  
+    .footer-button {
+      width: auto; /*  Автоматическая ширина кнопок на мобильных */
+    }
+  }
