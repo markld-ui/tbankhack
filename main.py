@@ -121,6 +121,8 @@ def submit_registration():
 
     # Проверка, существует ли уже email
     if user_type == 'employer':
+        session['user_type'] = 'employer'
+        session['email'] = email
         company = get_company_by_email(email)
         if company:
             flash('Email уже зарегистрирован как работодатель.', "error")
@@ -140,6 +142,8 @@ def submit_registration():
         flash("Регистрация прошла успешно!", "success")
 
     elif user_type == 'trainee':
+        session['user_type'] = 'trainee'
+        session['email'] = email
         user = get_user_by_email(email)
         if user:
             flash('Email уже зарегистрирован как стажёр.', "error")
